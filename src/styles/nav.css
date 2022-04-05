@@ -1,0 +1,76 @@
+.NavContainer {
+    background-color: black;
+}
+
+.NavOption {
+    margin: 10px;
+    color: white;
+    padding: 5px;
+    border-bottom: 2px solid black;
+    text-decoration: none;
+}
+
+.NavOption:hover {
+    border-color: white;
+}
+
+.MobileButtons{
+    display: none;
+}
+
+.MenuButton {
+}
+
+.LogoAndButtons {
+    width: 60%;
+    justify-content: space-between;
+    align-items: center;
+    display: flex;
+    margin: 10px;
+}
+
+.LogoArea {
+    text-align: center;
+    font-size: 30px;
+    font-weight: 700;
+    margin-left: 10px;
+}
+
+.SearchBar {
+    margin-bottom: 10px;
+    border: 1px solid rgb(145, 145, 145);
+    border-radius: 5px;
+    padding-left: 10px;
+}
+
+.SearchBar:hover {
+    border-color: black;
+}
+
+.NavMobile{
+    color: white;
+    display: none;
+}
+
+@media screen and (max-width: 600px) {
+    .MenuButton {
+        display: none;
+    }
+
+    .LogoAndButtons {
+        justify-content: center;
+        align-items: center;
+    }
+
+    .MobileButtons{
+        display: block;
+    }
+
+    .NavOption{
+        display: none;
+    }
+
+    .NavMobile{
+        display: block;
+    }
+}
