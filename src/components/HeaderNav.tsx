@@ -12,6 +12,9 @@ import { Routes, Route, Link } from "react-router-dom";
 import Home from '../pages/Home';
 import About from '../pages/About';
 
+//My components
+import CartItem from '../components/CartItem';
+
 
 //Icons
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
@@ -21,6 +24,37 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import MenuIcon from '@mui/icons-material/Menu';
 
 import '../styles/nav.css';
+
+
+const FakeData = [
+    {
+      "name": "White T-Shirt",
+      "coverImg": "https://elevennewyork.com/wp-content/uploads/2018/02/04_white-tee_model-back-scaled-680x935.jpg",
+      "color":["white"],
+      "size": ["P","G","GG","XG"],
+      "price": 39.99,
+      "description":"A short description of this white T-Shirt.",
+      "category": ["man","tshirt"]
+    },
+    {
+      "name": "Red Dress",
+      "coverImg": "https://i.pinimg.com/originals/d3/bd/f8/d3bdf848490aa7b71950cbc931f75cf5.jpg",
+      "color":["red"],
+      "size": ["P","G","GG","XG"],
+      "price": 59.99,
+      "description":"A short description of this Red Dress.",
+      "category": ["woman","dress"]
+    },
+    {
+      "name": "Nike Air Jordan",
+      "coverImg": "https://40378.cdn.simplo7.net/static/40378/sku/masculino-tenis-nike-air-jordan-1-mid--p-1615292373886.jpg",
+      "color":["black"],
+      "size": ["41","42","43","44"],
+      "price": 89.99,
+      "description":"A short description of this Nike shoes.",
+      "category": ["man","woman","shoes"]
+    },
+  ];
 
 export default function HeaderNav() {
 
@@ -111,9 +145,8 @@ export default function HeaderNav() {
                     horizontal: 'left',
                     }}
                 >
-                    <Typography sx={{ p: 2 }}>Itens:</Typography>
-                    <p>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</p>
-                    <p>AAAAAAAAAAAAAAA</p><p>AAAAAAAAAAAAAAA</p><p>AAAAAAAAAAAAAAA</p><p>AAAAAAAAAAAAAAA</p><p>AAAAAAAAAAAAAAA</p><p>AAAAAAAAAAAAAAA</p>
+                    <CartItem name={FakeData[0].name} cover={FakeData[0].coverImg} price={FakeData[0].price} quantity={1} />
+                    <CartItem name={FakeData[1].name} cover={FakeData[1].coverImg} price={FakeData[1].price} quantity={5}  />
                     <Button variant="outlined">BUY</Button>
                 </Popover>
             

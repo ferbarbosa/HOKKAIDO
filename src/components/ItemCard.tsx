@@ -5,23 +5,31 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 
-export default function ItemCard() {
+interface Props {
+  name:string;
+  cover:string;
+  price:number;
+};
+
+const ItemCard: React.FC<Props> = ({name, cover, price}) => {
   return (
     <Card sx={{ width: '100%' }}>
       <CardActionArea sx={{margin: '1px'}}>
         <CardMedia
           component="img"
           height="400"
-          image="https://img.ltwebstatic.com/images3_pi/2021/04/27/1619486350277582df35f2eda5bd2e83fc7586708e_thumbnail_405x552.webp"
+          image= {cover ? cover : "img.png"}
           alt="Product Image"
         />
         <CardContent>
           <Typography variant="body2" color="text.secondary">
-              CROPPED TIPE A
+              {name ? name : "A name here"}
           </Typography>
-          <a>$24,90</a>
+          <a>${price ? price : "00.00"}</a>
         </CardContent>
       </CardActionArea>
     </Card>
   )
 }
+
+export default ItemCard;

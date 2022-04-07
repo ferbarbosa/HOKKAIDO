@@ -8,7 +8,9 @@ import Grid from '@mui/material/Grid';
 import InputBase from '@mui/material/InputBase';
 import Button from '@mui/material/Button';
 
+//My components
 import ItemCard from '../components/ItemCard';
+
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -26,6 +28,38 @@ import banner1 from '../resources/images/banner1.png';
 import banner2 from '../resources/images/banner2.png';
 import banner3 from '../resources/images/banner3.png';
 import banner4 from '../resources/images/banner4.png';
+
+
+
+const FakeData = [
+  {
+    "name": "White T-Shirt",
+    "coverImg": "https://elevennewyork.com/wp-content/uploads/2018/02/04_white-tee_model-back-scaled-680x935.jpg",
+    "color":["white"],
+    "size": ["P","G","GG","XG"],
+    "price": 39.99,
+    "description":"A short description of this white T-Shirt.",
+    "category": ["man","tshirt"]
+  },
+  {
+    "name": "Red Dress",
+    "coverImg": "https://i.pinimg.com/originals/d3/bd/f8/d3bdf848490aa7b71950cbc931f75cf5.jpg",
+    "color":["red"],
+    "size": ["P","G","GG","XG"],
+    "price": 59.99,
+    "description":"A short description of this Red Dress.",
+    "category": ["woman","dress"]
+  },
+  {
+    "name": "Nike Air Jordan",
+    "coverImg": "https://40378.cdn.simplo7.net/static/40378/sku/masculino-tenis-nike-air-jordan-1-mid--p-1615292373886.jpg",
+    "color":["black"],
+    "size": ["41","42","43","44"],
+    "price": 89.99,
+    "description":"A short description of this Nike shoes.",
+    "category": ["man","woman","shoes"]
+  },
+];
 
 export default function Home() {
   
@@ -90,40 +124,31 @@ export default function Home() {
               <div className="Popular">
                 <Slider {...PopularSettings}>
                   <div className="PopularItem">
-                    <ItemCard />
+                    <ItemCard name={FakeData[0].name} cover={FakeData[0].coverImg} price={FakeData[0].price} />
                   </div>
                   <div className="PopularItem">
-                    <ItemCard />
+                    <ItemCard name={FakeData[1].name} cover={FakeData[1].coverImg} price={FakeData[1].price} />
                   </div>
                   <div className="PopularItem">
-                    <ItemCard />
+                    <ItemCard name={FakeData[2].name} cover={FakeData[2].coverImg} price={FakeData[2].price} />
                   </div>
                   <div className="PopularItem">
-                    <ItemCard />
+                    <ItemCard name={FakeData[0].name} cover={FakeData[0].coverImg} price={FakeData[0].price} />
                   </div>
                   <div className="PopularItem">
-                    <ItemCard />
+                    <ItemCard name={FakeData[1].name} cover={FakeData[1].coverImg} price={FakeData[1].price} />
                   </div>
                   <div className="PopularItem">
-                    <ItemCard />
+                    <ItemCard name={FakeData[2].name} cover={FakeData[2].coverImg} price={FakeData[2].price} />
                   </div>
                   <div className="PopularItem">
-                    <ItemCard />
+                    <ItemCard name={FakeData[0].name} cover={FakeData[0].coverImg} price={FakeData[0].price} />
                   </div>
                   <div className="PopularItem">
-                    <ItemCard />
+                    <ItemCard name={FakeData[1].name} cover={FakeData[1].coverImg} price={FakeData[1].price} />
                   </div>
                   <div className="PopularItem">
-                    <ItemCard />
-                  </div>
-                  <div className="PopularItem">
-                    <ItemCard />
-                  </div>
-                  <div className="PopularItem">
-                    <ItemCard />
-                  </div>
-                  <div className="PopularItem">
-                    <ItemCard />
+                    <ItemCard name={FakeData[2].name} cover={FakeData[2].coverImg} price={FakeData[2].price} />
                   </div>
                 </Slider>
               </div>
@@ -131,40 +156,13 @@ export default function Home() {
               <div className="PopularMobile">
                 <Slider {...PopularSettingsMobile}>
                   <div className="PopularItem">
-                    <ItemCard />
+                    <ItemCard name={FakeData[0].name} cover={FakeData[0].coverImg} price={FakeData[0].price} />
                   </div>
                   <div className="PopularItem">
-                    <ItemCard />
+                    <ItemCard name={FakeData[0].name} cover={FakeData[0].coverImg} price={FakeData[0].price} />
                   </div>
                   <div className="PopularItem">
-                    <ItemCard />
-                  </div>
-                  <div className="PopularItem">
-                    <ItemCard />
-                  </div>
-                  <div className="PopularItem">
-                    <ItemCard />
-                  </div>
-                  <div className="PopularItem">
-                    <ItemCard />
-                  </div>
-                  <div className="PopularItem">
-                    <ItemCard />
-                  </div>
-                  <div className="PopularItem">
-                    <ItemCard />
-                  </div>
-                  <div className="PopularItem">
-                    <ItemCard />
-                  </div>
-                  <div className="PopularItem">
-                    <ItemCard />
-                  </div>
-                  <div className="PopularItem">
-                    <ItemCard />
-                  </div>
-                  <div className="PopularItem">
-                    <ItemCard />
+                    <ItemCard name={FakeData[0].name} cover={FakeData[0].coverImg} price={FakeData[0].price} />
                   </div>
                 </Slider>
               </div>
