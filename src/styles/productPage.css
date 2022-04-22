@@ -1,0 +1,34 @@
+.mainImg {
+    width: 100%;
+}
+
+.nameTxt {
+    font-family: 'Oxygen', sans-serif;
+}
+
+.colorSelect{
+    border-radius: 50px;
+    padding: 10px;
+    border: 2px solid grey;
+    cursor: pointer;
+    margin-left: 5px;
+    
+}
+
+.colorSelect:focus {
+    border: 2px solid black;
+}
+
+.labelTxt{
+    font-family: 'Oxygen', sans-serif;
+    font-weight: 700;
+    margin-top: 30px;
+}
+
+.selectedTxt{
+    font-weight: 300;
+}
+
+.infoArea {
+    margin: 100px;
+}
