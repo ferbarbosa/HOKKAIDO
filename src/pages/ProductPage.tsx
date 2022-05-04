@@ -9,6 +9,7 @@ import '../styles/productPage.css';
 
 //icons
 import StraightenIcon from '@mui/icons-material/Straighten';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 interface Props {
   name:string;
@@ -22,7 +23,7 @@ interface Props {
 const FakeData = [
   {
     "name": "White T-Shirt",
-    "coverImg": "https://elevennewyork.com/wp-content/uploads/2018/02/04_white-tee_model-back-scaled-680x935.jpg",
+    "coverImg": ["https://elevennewyork.com/wp-content/uploads/2018/02/04_white-tee_model-back-scaled-680x935.jpg", "https://rukminim2.flixcart.com/image/714/857/kfoapow0-0/shirt/g/j/w/m-hlsh008832-highlander-original-imafw2ggmtfqgqkj.jpeg?q=50"],
     "color":["white","black","blue", "yellow", "red"],
     "size": ["P","G","GG","XG"],
     "price": 39.99,
@@ -31,7 +32,7 @@ const FakeData = [
   },
   {
     "name": "Red Dress",
-    "coverImg": "https://i.pinimg.com/originals/d3/bd/f8/d3bdf848490aa7b71950cbc931f75cf5.jpg",
+    "coverImg": ["https://i.pinimg.com/originals/d3/bd/f8/d3bdf848490aa7b71950cbc931f75cf5.jpg"],
     "color":["red"],
     "size": ["P","G","GG","XG"],
     "price": 59.99,
@@ -40,7 +41,7 @@ const FakeData = [
   },
   {
     "name": "Nike Air Jordan",
-    "coverImg": "https://40378.cdn.simplo7.net/static/40378/sku/masculino-tenis-nike-air-jordan-1-mid--p-1615292373886.jpg",
+    "coverImg": ["https://40378.cdn.simplo7.net/static/40378/sku/masculino-tenis-nike-air-jordan-1-mid--p-1615292373886.jpg"],
     "color":["black"],
     "size": ["41","42","43","44"],
     "price": 89.99,
@@ -55,9 +56,14 @@ export const ProductPage: React.FC<Props>  = ({name, cover, price, size, color})
 
   const [selectedColor, setselectedColor] = useState<string>('white');
   const [selectedSize, setSelectedSize] = useState<string>(FakeData[0].size[0]);
+  const [selectedPreview, setSelectedPreview] = useState<string>(FakeData[0].coverImg[0])
 
   const changeColor = (color:string) => {
     setselectedColor(color);
+  }
+
+  const changePreview = (preview:string) => {
+    setSelectedPreview(preview);
   }
 
   const changeSize = (
@@ -73,14 +79,20 @@ export const ProductPage: React.FC<Props>  = ({name, cover, price, size, color})
         container spacing={1} 
         justifyContent="center"
       >
-        <Grid item xs={6} sx={{'&.MuiGrid-item': {padding: '30px', paddingTop: '20px'}}}>
-          <img className="mainImg" src={FakeData[0].coverImg}/>
+        <Grid item xs={1}>
+          {
+            FakeData[0].coverImg.map((cover,index) => <button className="selectPreviewButton" onClick={() => changePreview(FakeData[0].coverImg[index])} > <img className="selectPreviewImg" src={FakeData[0].coverImg[index]} /> </button>)
+          
+          }
+        </Grid>
+        <Grid className="imgBox" item xs={6} sx={{'&.MuiGrid-item': {padding: '30px', paddingTop: '20px'}}}>
+          <img className="mainImg" src={selectedPreview}/>
           <Typography variant="caption" display="block" gutterBottom>
             Click on the image to zoom in
           </Typography>
         </Grid>
 
-        <Grid item xs={6} sx={{'&.MuiGrid-item': {padding: '30px', paddingTop: '8px'}}}>
+        <Grid item xs={5} sx={{'&.MuiGrid-item': {padding: '30px', paddingTop: '8px'}}}>
 
           <h1 className="nameTxt" >
             {FakeData[0].name}
@@ -141,11 +153,42 @@ export const ProductPage: React.FC<Props>  = ({name, cover, price, size, color})
             }}
           >
             <StraightenIcon />
-            <Typography variant="caption" sx={{	fontWeight: 400 }}>Size table</Typography>
+            <Typography variant="caption" sx={{	fontWeight: 400}}>Size table</Typography>
 
           </div>
 
-          <p>Price: $149.99</p>
+          <Grid 
+            container spacing={1} 
+            alignItems="center"
+            className="priceBox"
+          >
+
+            <Grid item xs={6} className="priceTxt">
+              <p>$99.99</p>
+            </Grid>
+
+            <Grid item xs={6} className="creditCardtxt">
+              <p>Credit card 4x $24.99</p>
+              <p>With hokkaido card 10x $9.99</p>
+            </Grid>
+            
+            <Grid  item xs={10} >
+              <button className="addToCartButton"><p className="cartButtonTxt">Add to cart</p></button>
+            </Grid>
+            <Grid item xs={2} >
+              <button className="addFavoriteButton"><FavoriteBorderIcon className="addFavoriteHeart" /></button>
+            </Grid>
+
+          </Grid>
+          
+        </Grid>
+        <Grid item xs={12} >
+          <p className="labelTxt">
+            Description:
+          </p>
+          <p>
+            {FakeData[0].description}
+          </p>
         </Grid>
       </Grid>
     </Container>

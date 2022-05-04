@@ -8,6 +8,8 @@ import Button from '@mui/material/Button';
 import InputBase from '@mui/material/InputBase';
 import Typography from '@mui/material/Typography';
 import Popover from '@mui/material/Popover';
+import Modal from '@mui/material/Modal';
+import TextField from '@mui/material/TextField';
 import { Routes, Route, Link } from "react-router-dom";
 import Home from '../pages/Home';
 import About from '../pages/About';
@@ -60,6 +62,10 @@ export default function HeaderNav() {
 
         const [value, setValue] = useState<string>('one');
         const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+        const [openLogin, setOpenLogin] = React.useState<boolean>(false);
+
+        const handleOpenLogin = () => setOpenLogin(true);
+        const handleCloseLogin = () => setOpenLogin(false);
 
         const openCart = (event: React.MouseEvent<HTMLButtonElement>) => {
             setAnchorEl(event.currentTarget);
@@ -87,7 +93,7 @@ export default function HeaderNav() {
 
                         <div className="MenuButton">
                             <a>Wellcome to HOKKAIDO</a>
-                            <IconButton sx={{ p: 1 }}>
+                            <IconButton onClick={handleOpenLogin} sx={{ p: 1 }}>
                                 <AccountCircleIcon />
                             </IconButton >
                             <IconButton sx={{ p: 1 }} onClick={openCart}>
@@ -149,6 +155,85 @@ export default function HeaderNav() {
                     <CartItem name={FakeData[1].name} cover={FakeData[1].coverImg} price={FakeData[1].price} quantity={5}  />
                     <Button variant="outlined">BUY</Button>
                 </Popover>
+
+                
+                <Modal
+                    open={openLogin}
+                    onClose={handleCloseLogin}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                >
+                    <Box 
+                        sx={{
+                            position: 'absolute' as 'absolute',
+                            top: '50%',
+                            left: '50%',
+                            transform: 'translate(-50%, -50%)',
+                            width: 400,
+                            boxShadow: 24,
+                            p: 4,
+                        }}
+
+                        className="loginModal"
+                    >
+                        <p className="loginTitleTxt">Login to your account:</p>
+                        <Box
+                        component="form"
+                        sx={{
+                            '& .MuiTextField-root': { width: '100%',},
+                        }}
+                        noValidate
+                        autoComplete="off"
+                        >
+                            <TextField
+                                helperText="Please enter your username"
+                                id="username"
+                                label="Username"
+                                sx={{
+                                    '& label.Mui-focused': {
+                                        color: 'black',
+                                      },
+                                      '& .MuiInput-underline:after': {
+                                        borderBottomColor: 'black',
+                                      },
+                                      '& .MuiOutlinedInput-root': {
+                                        '&.Mui-focused fieldset': {
+                                          borderColor: 'black',
+                                        },
+                                      },
+                                }}
+                            />
+                            <TextField
+                                helperText="Please enter your password"
+                                id="password"
+                                label="Password"
+                                type="password"
+                                autoComplete="current-password"
+                                sx={{
+                                    marginTop: 1,
+                                    '& label.Mui-focused': {
+                                        color: 'black',
+                                      },
+                                      '& .MuiInput-underline:after': {
+                                        borderBottomColor: 'black',
+                                      },
+                                      '& .MuiOutlinedInput-root': {
+                                        '&.Mui-focused fieldset': {
+                                          borderColor: 'black',
+                                        },
+                                      },
+                                }}
+                            />
+
+                        </Box>
+                        <button className="loginButton">
+                            <p className="loginTxt">
+                                Login
+                            </p>
+                        </button>
+                        <p>Don't have account? <a className="registerLinkTxt">Register now!</a></p>
+                    </Box>
+                </Modal>
             
             </Box>
         )

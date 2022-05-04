@@ -5,6 +5,7 @@ import Home from './pages/Home';
 import About from './pages/About';
 import ProductPage from './pages/ProductPage'
 import HeaderNav from './components/HeaderNav';
+import Footer from './components/Footer';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="about" element={<About />} />
         <Route path="product" element={<ProductPage name="p" cover="p" price={10} size="a" color="a"  />} />
       </Routes>
+      <Footer />
     </div>
   );
 }
