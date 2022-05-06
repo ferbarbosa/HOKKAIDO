@@ -16,6 +16,7 @@ import About from '../pages/About';
 
 //My components
 import CartItem from '../components/CartItem';
+import Divider from '../components/Divider';
 
 
 //Icons
@@ -140,6 +141,9 @@ export default function HeaderNav() {
                     <a className="NavMobile">Menu</a>
                 </Tabs>
 
+                {
+                    // CART AREA
+                }
 
                 <Popover
                     id={id}
@@ -150,13 +154,65 @@ export default function HeaderNav() {
                     vertical: 'bottom',
                     horizontal: 'left',
                     }}
+                    sx={{
+                        '& .MuiPopover-paper': {padding: '15px'}
+                    }}
                 >
+                    <Grid
+                        container
+                        justifyContent="space-between"
+                        direction="row"
+                        alignItems="center"
+                    >
+
+                        <Grid item xs={3}>
+                            <p className="cartTitleTxt">
+                                Cart
+                            </p>
+                        </Grid>
+
+                        <Grid item xs={3}>
+                            <p className="cartItemTxt">
+                                Items: 2
+                            </p>
+                        </Grid>
+                        
+                    </Grid>
+                    <Divider color="black" size={1} type="dotted" />
                     <CartItem name={FakeData[0].name} cover={FakeData[0].coverImg} price={FakeData[0].price} quantity={1} />
                     <CartItem name={FakeData[1].name} cover={FakeData[1].coverImg} price={FakeData[1].price} quantity={5}  />
-                    <Button variant="outlined">BUY</Button>
+                    <Divider color="black" size={1} type="dotted" />
+                    <Grid
+                        container spacing={0} 
+                        direction="row"
+                        justifyContent="space-between"
+                        alignItems="center"
+                    >
+                        <Grid item xs={4}>
+                            <p className="cartTotalTxt">
+                                Total
+                            </p>
+                        </Grid>
+                        <Grid item xs={4}>
+                            <p className="cartTotalValueTxt">
+                                $199.99
+                            </p>
+                        </Grid>
+                    </Grid>
+
+                    <p className="cartCardTxt">
+                            With hokkaido card 5% off
+                    </p>
+
+                    <button className="buyButton">
+                        <p className="buyButtonTxt">BUY</p>
+                    </button>
                 </Popover>
 
-                
+                {
+                    // LOGIN AREA
+                }
+
                 <Modal
                     open={openLogin}
                     onClose={handleCloseLogin}

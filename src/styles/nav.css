@@ -117,3 +117,67 @@
     color: black;
     font-size: 20px;
 }
+
+.cartTitleTxt {
+    font-family: 'Oxygen', sans-serif;
+    color: black;
+    font-size: 15px;
+    margin: 0;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.cartItemTxt {
+    font-family: 'Oxygen', sans-serif;
+    color: black;
+    font-size: 11px;
+    margin: 0;
+    font-weight: 700;
+}
+
+.buyButton {
+    border: none;
+    margin-top: 10px;
+    background-color: rgb(72, 190, 68);
+    width: 100%;  
+    cursor: pointer;  
+}
+
+.buyButton:hover {
+    background-color: rgb(94, 231, 89)
+}
+
+.buyButtonTxt {
+    font-family: 'Oxygen', sans-serif;
+    text-transform: uppercase;
+    font-size: 15px;
+    font-weight: 700;
+    color: black;
+}
+
+.cartTotalTxt {
+    font-family: 'Oxygen', sans-serif;
+    color: black;
+    font-size: 20px;
+    margin: 0;
+    font-weight: 700;
+}
+
+.cartTotalValueTxt {
+    font-family: 'Oxygen', sans-serif;
+    color: black;
+    font-size: 20px;
+    margin: 0;
+}
+
+.cartCardTxt {
+    text-align: end;
+    margin: 0;
+    margin-top: 5px;
+    margin-right: 10px;
+    font-family: 'Oxygen', sans-serif;
+    color: black;
+    font-size: 12px;
+    
+}
+
