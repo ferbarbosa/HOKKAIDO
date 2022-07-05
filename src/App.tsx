@@ -3,7 +3,8 @@ import './App.css';
 import { Routes, Route, Link } from "react-router-dom";
 import Home from './pages/Home';
 import About from './pages/About';
-import ProductPage from './pages/ProductPage'
+import ProductPage from './pages/ProductPage';
+import Catalog from './pages/Catalog';
 import HeaderNav from './components/HeaderNav';
 import Footer from './components/Footer';
 
@@ -14,7 +15,9 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="about" element={<About />} />
-        <Route path="product" element={<ProductPage name="p" cover="p" price={10} size="a" color="a"  />} />
+        <Route path="product" element={<ProductPage itemId="KY0UIUujP-" />} />
+        <Route path="catalog/male" element={<Catalog type="male" />} />
+        <Route path="catalog/female" element={<Catalog type="female" />} />
       </Routes>
       <Footer />
     </div>

@@ -1,9 +1,11 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import Typography from '@mui/material/Typography';
+
+import api from "../services/api";
 
 import '../styles/productPage.css';
 
@@ -11,13 +13,18 @@ import '../styles/productPage.css';
 import StraightenIcon from '@mui/icons-material/Straighten';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
-interface Props {
+interface Item {
   name:string;
-  cover:string;
-  price:number;
-  size:string;
-  color:string;
+  cover:Array<any>;
+  price:string;
+  size:Array<any>;
+  color:Array<any>;
+  description: string;
 };
+
+interface Props {
+  itemId: string;
+}
 
 
 const FakeData = [
@@ -52,11 +59,44 @@ const FakeData = [
 
 
 
-export const ProductPage: React.FC<Props>  = ({name, cover, price, size, color}) => {
-
+export const ProductPage: React.FC<Props>  = ({itemId}) => {
   const [selectedColor, setselectedColor] = useState<string>('white');
   const [selectedSize, setSelectedSize] = useState<string>(FakeData[0].size[0]);
   const [selectedPreview, setSelectedPreview] = useState<string>(FakeData[0].coverImg[0])
+
+  const [credCardPrice, setCredCardPrice] = useState<string>('0');
+
+  const [item, setItem] = useState<Item>({name: 'Title', cover: ['img'], price: '99.99', size: [''], color: [''], description: ''});
+
+  //const axios = require('axios');
+
+  useEffect(() => {
+    console.log("Testeee");
+    api.get('/items/'+itemId)
+    .then(function (response:any) {
+      // handle success
+      setItem({
+        name: response.data.title,
+        cover: response.data.img,
+        price: response.data.price,
+        size: response.data.size,
+        color: response.data.color,
+        description: response.data.description
+      });
+
+      const credValue = (Number(response.data.price) / 4) * 0.9;
+
+      setCredCardPrice(credValue.toFixed(2));
+      console.log(response.data);
+    })
+    .catch(function (error:any) {
+      // handle error
+      console.log(error);
+    })
+  }, [])
+  
+
+
 
   const changeColor = (color:string) => {
     setselectedColor(color);
@@ -81,7 +121,7 @@ export const ProductPage: React.FC<Props>  = ({name, cover, price, size, color})
       >
         <Grid item xs={1}>
           {
-            FakeData[0].coverImg.map((cover,index) => <button className="selectPreviewButton" onClick={() => changePreview(FakeData[0].coverImg[index])} > <img className="selectPreviewImg" src={FakeData[0].coverImg[index]} /> </button>)
+            item.cover.map((cover,index) => <button className="selectPreviewButton" onClick={() => changePreview(item.cover[index])} > <img className="selectPreviewImg" src={item.cover[index]} /> </button>)
           
           }
         </Grid>
@@ -95,7 +135,7 @@ export const ProductPage: React.FC<Props>  = ({name, cover, price, size, color})
         <Grid item xs={5} sx={{'&.MuiGrid-item': {padding: '30px', paddingTop: '8px'}}}>
 
           <h1 className="nameTxt" >
-            {FakeData[0].name}
+            {item.name}
           </h1>
 
           <p className="labelTxt">
@@ -107,7 +147,7 @@ export const ProductPage: React.FC<Props>  = ({name, cover, price, size, color})
 
           <div>
             {
-              FakeData[0].color.map((color) => <button className="colorSelect" style={{backgroundColor: color}} onClick={() => changeColor(color)} ></button>)
+              item.color.map((color) => <button className="colorSelect" style={{backgroundColor: color}} onClick={() => changeColor(color)} ></button>)
             }
           </div>
 
@@ -125,7 +165,7 @@ export const ProductPage: React.FC<Props>  = ({name, cover, price, size, color})
           >
 
             {
-              FakeData[0].size.map((size) => 
+              item.size.map((size) => 
                 <ToggleButton 
                   sx={{
                     color: 'black', 
@@ -164,12 +204,12 @@ export const ProductPage: React.FC<Props>  = ({name, cover, price, size, color})
           >
 
             <Grid item xs={6} className="priceTxt">
-              <p>$99.99</p>
+              <p>${item.price}</p>
             </Grid>
 
             <Grid item xs={6} className="creditCardtxt">
-              <p>Credit card 4x $24.99</p>
-              <p>With hokkaido card 10x $9.99</p>
+              <p>Credit card 4x ${credCardPrice}</p>
+              <p>10% Off</p>
             </Grid>
             
             <Grid  item xs={10} >
@@ -187,7 +227,7 @@ export const ProductPage: React.FC<Props>  = ({name, cover, price, size, color})
             Description:
           </p>
           <p>
-            {FakeData[0].description}
+            {item.description}
           </p>
         </Grid>
       </Grid>

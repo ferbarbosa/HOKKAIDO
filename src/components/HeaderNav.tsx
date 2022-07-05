@@ -131,9 +131,9 @@ export default function HeaderNav() {
                 >
                     <Link className="NavOption" to="/">HOME</Link>
                     <Link className="NavOption" to="/">SALE</Link>
-                    <Link className="NavOption" to="/">FEMALE</Link>
-                    <Link className="NavOption" to="/product">MALE</Link>
-                    <Link className="NavOption" to="/">T-SHIRTS</Link>
+                    <Link className="NavOption" to="/catalog/female">FEMALE</Link>
+                    <Link className="NavOption" to="/catalog/male">MALE</Link>
+                    <Link className="NavOption" to="/product">T-SHIRTS</Link>
                     <Link className="NavOption" to="/">DRESSES</Link>
                     <Link className="NavOption" to="/">SHOES</Link>
                     <Link className="NavOption" to="/about">ABOUT</Link>
