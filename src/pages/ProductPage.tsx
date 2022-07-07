@@ -4,6 +4,7 @@ import Container from '@mui/material/Container';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import Typography from '@mui/material/Typography';
+import { useParams } from "react-router-dom";
 
 import api from "../services/api";
 
@@ -59,7 +60,7 @@ const FakeData = [
 
 
 
-export const ProductPage: React.FC<Props>  = ({itemId}) => {
+export const ProductPage  = () => {
   const [selectedColor, setselectedColor] = useState<string>('white');
   const [selectedSize, setSelectedSize] = useState<string>(FakeData[0].size[0]);
   const [selectedPreview, setSelectedPreview] = useState<string>(FakeData[0].coverImg[0])
@@ -68,11 +69,15 @@ export const ProductPage: React.FC<Props>  = ({itemId}) => {
 
   const [item, setItem] = useState<Item>({name: 'Title', cover: ['img'], price: '99.99', size: [''], color: [''], description: ''});
 
+  const URLParams = useParams();
+  
+
   //const axios = require('axios');
 
   useEffect(() => {
-    console.log("Testeee");
-    api.get('/items/'+itemId)
+    console.log(URLParams)
+    //tenho que arrumar
+    api.get('/items/'+URLParams.id)
     .then(function (response:any) {
       // handle success
       setItem({
@@ -87,7 +92,6 @@ export const ProductPage: React.FC<Props>  = ({itemId}) => {
       const credValue = (Number(response.data.price) / 4) * 0.9;
 
       setCredCardPrice(credValue.toFixed(2));
-      console.log(response.data);
     })
     .catch(function (error:any) {
       // handle error

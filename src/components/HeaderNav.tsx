@@ -1,18 +1,17 @@
 import React, { Component, useState } from 'react'
-import { connect } from 'react-redux'
 import Tabs from '@mui/material/Tabs';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
-import Button from '@mui/material/Button';
 import InputBase from '@mui/material/InputBase';
-import Typography from '@mui/material/Typography';
 import Popover from '@mui/material/Popover';
 import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
 import { Routes, Route, Link } from "react-router-dom";
-import Home from '../pages/Home';
-import About from '../pages/About';
+import Button from '@mui/material/Button';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 
 //My components
 import CartItem from '../components/CartItem';
@@ -21,7 +20,6 @@ import Divider from '../components/Divider';
 
 //Icons
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import SearchIcon from '@mui/icons-material/Search';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 import MenuIcon from '@mui/icons-material/Menu';
@@ -64,6 +62,7 @@ export default function HeaderNav() {
         const [value, setValue] = useState<string>('one');
         const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
         const [openLogin, setOpenLogin] = React.useState<boolean>(false);
+        const [mobileMenu, setMobileMenu] = useState<boolean>(false);
 
         const handleOpenLogin = () => setOpenLogin(true);
         const handleCloseLogin = () => setOpenLogin(false);
@@ -78,6 +77,15 @@ export default function HeaderNav() {
 
         const open = Boolean(anchorEl);
         const id = open ? 'simple-popover' : undefined;
+
+        const showMobileMenu = () => {
+            if(!mobileMenu){
+                setMobileMenu(true);
+            }else{
+                setMobileMenu(false);
+            }
+            
+        }
         
         return (
             <Box sx={{ width: '100%' }}>
@@ -87,6 +95,10 @@ export default function HeaderNav() {
                     alignItems="center"
                 >
                     <Box className="LogoAndButtons">
+
+                        <div className="MobileButtons">
+                            
+                        </div>
 
                         <a className="LogoArea">
                             HOKKAIDO
@@ -99,12 +111,6 @@ export default function HeaderNav() {
                             </IconButton >
                             <IconButton sx={{ p: 1 }} onClick={openCart}>
                                 <ShoppingCartIcon />
-                            </IconButton >
-                        </div>
-                        
-                        <div className="MobileButtons">
-                             <IconButton sx={{ p: 1 }}>
-                                <MenuIcon />
                             </IconButton >
                         </div>
 
@@ -138,7 +144,9 @@ export default function HeaderNav() {
                     <Link className="NavOption" to="/">SHOES</Link>
                     <Link className="NavOption" to="/about">ABOUT</Link>
 
-                    <a className="NavMobile">Menu</a>
+                    <div className="NavMobile">
+
+                    </div>
                 </Tabs>
 
                 {
