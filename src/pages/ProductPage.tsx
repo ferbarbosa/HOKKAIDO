@@ -28,46 +28,16 @@ interface Props {
 }
 
 
-const FakeData = [
-  {
-    "name": "White T-Shirt",
-    "coverImg": ["https://elevennewyork.com/wp-content/uploads/2018/02/04_white-tee_model-back-scaled-680x935.jpg", "https://rukminim2.flixcart.com/image/714/857/kfoapow0-0/shirt/g/j/w/m-hlsh008832-highlander-original-imafw2ggmtfqgqkj.jpeg?q=50"],
-    "color":["white","black","blue", "yellow", "red"],
-    "size": ["P","G","GG","XG"],
-    "price": 39.99,
-    "description":"A short description of this white T-Shirt.",
-    "category": ["man","tshirt"]
-  },
-  {
-    "name": "Red Dress",
-    "coverImg": ["https://i.pinimg.com/originals/d3/bd/f8/d3bdf848490aa7b71950cbc931f75cf5.jpg"],
-    "color":["red"],
-    "size": ["P","G","GG","XG"],
-    "price": 59.99,
-    "description":"A short description of this Red Dress.",
-    "category": ["woman","dress"]
-  },
-  {
-    "name": "Nike Air Jordan",
-    "coverImg": ["https://40378.cdn.simplo7.net/static/40378/sku/masculino-tenis-nike-air-jordan-1-mid--p-1615292373886.jpg"],
-    "color":["black"],
-    "size": ["41","42","43","44"],
-    "price": 89.99,
-    "description":"A short description of this Nike shoes.",
-    "category": ["man","woman","shoes"]
-  },
-];
-
-
-
 export const ProductPage  = () => {
+
+  const [item, setItem] = useState<Item>({name: 'Title', cover: ['img'], price: '99.99', size: [''], color: [''], description: ''});
   const [selectedColor, setselectedColor] = useState<string>('white');
-  const [selectedSize, setSelectedSize] = useState<string>(FakeData[0].size[0]);
-  const [selectedPreview, setSelectedPreview] = useState<string>(FakeData[0].coverImg[0])
+  const [selectedSize, setSelectedSize] = useState<string>('P');
+  const [selectedPreview, setSelectedPreview] = useState<string>('img')
 
   const [credCardPrice, setCredCardPrice] = useState<string>('0');
 
-  const [item, setItem] = useState<Item>({name: 'Title', cover: ['img'], price: '99.99', size: [''], color: [''], description: ''});
+  
 
   const URLParams = useParams();
   
@@ -89,6 +59,10 @@ export const ProductPage  = () => {
         description: response.data.description
       });
 
+      setSelectedPreview(response.data.img[0]);
+      setSelectedSize(response.data.size[0]);
+      setselectedColor(response.data.color[0]);
+
       const credValue = (Number(response.data.price) / 4) * 0.9;
 
       setCredCardPrice(credValue.toFixed(2));
@@ -101,6 +75,20 @@ export const ProductPage  = () => {
   
 
 
+  const addFavorite = (item:Item) => {
+
+    const items = localStorage.getItem("FAVORITE_LIST");
+
+    if(items){
+      const arrayItems = JSON.parse(items);
+      const putInOne = [...arrayItems,item];
+      const newItems = JSON.stringify(putInOne);
+      localStorage.setItem("FAVORITE_LIST",newItems);
+
+    }else{
+      localStorage.setItem("FAVORITE_LIST", JSON.stringify([item]));
+    }
+  }
 
   const changeColor = (color:string) => {
     setselectedColor(color);
@@ -125,7 +113,16 @@ export const ProductPage  = () => {
       >
         <Grid item xs={1}>
           {
-            item.cover.map((cover,index) => <button className="selectPreviewButton" onClick={() => changePreview(item.cover[index])} > <img className="selectPreviewImg" src={item.cover[index]} /> </button>)
+            item.cover.map((cover) => 
+              <button 
+                className="selectPreviewButton" 
+                onClick={() => changePreview(cover)} 
+              > 
+                <img 
+                  className="selectPreviewImg" 
+                  src={cover} 
+                /> 
+              </button>)
           
           }
         </Grid>
@@ -217,7 +214,7 @@ export const ProductPage  = () => {
             </Grid>
             
             <Grid  item xs={10} >
-              <button className="addToCartButton"><p className="cartButtonTxt">Add to cart</p></button>
+              <button className="addToCartButton"><p className="cartButtonTxt" onClick={() => addFavorite(item)}>Add to cart</p></button>
             </Grid>
             <Grid item xs={2} >
               <button className="addFavoriteButton"><FavoriteBorderIcon className="addFavoriteHeart" /></button>

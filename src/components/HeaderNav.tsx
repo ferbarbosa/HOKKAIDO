@@ -1,5 +1,4 @@
-import React, { Component, useState } from 'react'
-import Tabs from '@mui/material/Tabs';
+import React, { Component, useEffect, useState } from 'react'
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
@@ -8,10 +7,6 @@ import Popover from '@mui/material/Popover';
 import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
 import { Routes, Route, Link } from "react-router-dom";
-import Button from '@mui/material/Button';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 
 //My components
 import CartItem from '../components/CartItem';
@@ -21,48 +16,19 @@ import Divider from '../components/Divider';
 //Icons
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-
-import MenuIcon from '@mui/icons-material/Menu';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 
 import '../styles/nav.css';
 
 
-const FakeData = [
-    {
-      "name": "White T-Shirt",
-      "coverImg": "https://elevennewyork.com/wp-content/uploads/2018/02/04_white-tee_model-back-scaled-680x935.jpg",
-      "color":["white"],
-      "size": ["P","G","GG","XG"],
-      "price": 39.99,
-      "description":"A short description of this white T-Shirt.",
-      "category": ["man","tshirt"]
-    },
-    {
-      "name": "Red Dress",
-      "coverImg": "https://i.pinimg.com/originals/d3/bd/f8/d3bdf848490aa7b71950cbc931f75cf5.jpg",
-      "color":["red"],
-      "size": ["P","G","GG","XG"],
-      "price": 59.99,
-      "description":"A short description of this Red Dress.",
-      "category": ["woman","dress"]
-    },
-    {
-      "name": "Nike Air Jordan",
-      "coverImg": "https://40378.cdn.simplo7.net/static/40378/sku/masculino-tenis-nike-air-jordan-1-mid--p-1615292373886.jpg",
-      "color":["black"],
-      "size": ["41","42","43","44"],
-      "price": 89.99,
-      "description":"A short description of this Nike shoes.",
-      "category": ["man","woman","shoes"]
-    },
-  ];
-
 export default function HeaderNav() {
 
-        const [value, setValue] = useState<string>('one');
         const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
         const [openLogin, setOpenLogin] = React.useState<boolean>(false);
         const [mobileMenu, setMobileMenu] = useState<boolean>(false);
+        const [cartItems, setCartItems] = useState<Array<any>>([]);
+        const [totalItemsCart, settotalItemsCart] = useState<number>(0)
+        const [totalCartValue, settotalCartValue] = useState<string>('0');
 
         const handleOpenLogin = () => setOpenLogin(true);
         const handleCloseLogin = () => setOpenLogin(false);
@@ -86,6 +52,37 @@ export default function HeaderNav() {
             }
             
         }
+
+        useEffect(() => {
+            const localItems = localStorage.getItem('FAVORITE_LIST');
+            
+
+            if(localItems){
+                const arrayLocalItems = JSON.parse(localItems);
+                setCartItems(arrayLocalItems)
+                
+            }
+
+            settotalItemsCart(cartItems.length);
+
+            
+            
+            
+        }, [anchorEl])
+
+        useEffect(() => {
+            var total = 0;
+            cartItems.map((item, index) => {
+                total += Number(item.price);
+            })
+            settotalCartValue(total.toFixed(2));
+          
+        }, [totalItemsCart])
+        
+        
+
+        
+        
         
         return (
             <Box sx={{ width: '100%' }}>
@@ -112,6 +109,9 @@ export default function HeaderNav() {
                             <IconButton sx={{ p: 1 }} onClick={openCart}>
                                 <ShoppingCartIcon />
                             </IconButton >
+                            <IconButton sx={{ p: 1}} >
+                                <FavoriteIcon />
+                            </IconButton>
                         </div>
 
                     </Box>
@@ -127,27 +127,22 @@ export default function HeaderNav() {
                     />
                 </Grid>
                 
-                <Tabs
-                    value={value}
-                    textColor="secondary"
-                    indicatorColor="secondary"
-                    aria-label="secondary tabs example"
-                    centered
+                <div
                     className="NavContainer"
                 >
                     <Link className="NavOption" to="/">HOME</Link>
                     <Link className="NavOption" to="/">SALE</Link>
                     <Link className="NavOption" to="/catalog/female">FEMALE</Link>
                     <Link className="NavOption" to="/catalog/male">MALE</Link>
-                    <Link className="NavOption" to="/product">T-SHIRTS</Link>
-                    <Link className="NavOption" to="/">DRESSES</Link>
-                    <Link className="NavOption" to="/">SHOES</Link>
+                    <Link className="NavOption" to="/catalog/t-shirt">T-SHIRTS</Link>
+                    <Link className="NavOption" to="/catalog/dress">DRESSES</Link>
+                    <Link className="NavOption" to="/catalog/shoes">SHOES</Link>
                     <Link className="NavOption" to="/about">ABOUT</Link>
 
                     <div className="NavMobile">
 
                     </div>
-                </Tabs>
+                </div>
 
                 {
                     // CART AREA
@@ -181,14 +176,29 @@ export default function HeaderNav() {
 
                         <Grid item xs={3}>
                             <p className="cartItemTxt">
-                                Items: 2
+                                Items: {cartItems.length}
                             </p>
                         </Grid>
                         
                     </Grid>
                     <Divider color="black" size={1} type="dotted" />
-                    <CartItem name={FakeData[0].name} cover={FakeData[0].coverImg} price={FakeData[0].price} quantity={1} />
-                    <CartItem name={FakeData[1].name} cover={FakeData[1].coverImg} price={FakeData[1].price} quantity={5}  />
+                    
+                        {totalItemsCart > 0 ? 
+                            cartItems.map((item,index) => (
+
+                                    <CartItem 
+                                        key={index}
+                                        name={item.name} 
+                                        cover={item.cover[0]} 
+                                        price={item.price} 
+                                        quantity={1} 
+                                    />
+                            ))
+
+                        : <h1 className='emptyCart'>EMPTY</h1>
+                            
+                        }
+
                     <Divider color="black" size={1} type="dotted" />
                     <Grid
                         container spacing={0} 
@@ -203,7 +213,7 @@ export default function HeaderNav() {
                         </Grid>
                         <Grid item xs={4}>
                             <p className="cartTotalValueTxt">
-                                $199.99
+                                ${totalCartValue}
                             </p>
                         </Grid>
                     </Grid>
@@ -295,7 +305,7 @@ export default function HeaderNav() {
                                 Login
                             </p>
                         </button>
-                        <p>Don't have account? <a className="registerLinkTxt">Register now!</a></p>
+                        <p>Don't have account? <Link className="registerLinkTxt" to="/auth/register">Register now!</Link></p>
                     </Box>
                 </Modal>
             

@@ -2,10 +2,11 @@ import React, {useEffect, useState} from 'react'
 import ItemCard from "../components/ItemCard";
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import { Link } from "react-router-dom";
+import { Link  } from "react-router-dom";
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
+import { useParams } from "react-router-dom";
 
 import api from "../services/api";
 
@@ -18,28 +19,44 @@ interface Props {
     type: string;
 }
 
-export const Catalog: React.FC<Props>  = ({type}) => {
+
+
+export const Catalog: React.FC  = () => {
 
     const [products, setProducts] = useState<Array<any>>([]);
-    const [pagination, setPagination] = useState<number>(4)
+    const [pagination, setPagination] = useState<number>(8);
+    const [fetched, setFetched] = useState<boolean>(false);
+
+    const {type} = useParams();
 
     useEffect(() => {
-        api.get('/items/tag/'+type)
-        .then(function (response:any) {
-            products.push(response.data);
+        if(!fetched){
 
-            const data = response.data;
-            const receivedProduct = []
-            for(let id in data){
-               receivedProduct.push(data);
-            }
-            setProducts(receivedProduct);
-            
-        })
-        .catch(function (error:any) {
-          console.log(error);
-        })
-      }, [products || pagination])
+            setFetched(true);
+
+            api.get('/items/tag/'+type)
+            .then(function (response:any) {
+                products.push(response.data);
+
+                const data = response.data;
+                const receivedProduct = []
+                for(let id in data){
+                receivedProduct.push(data);
+                }
+                setProducts(receivedProduct);
+                
+            })
+            .catch(function (error:any) {
+            console.log(error);
+            })
+        }
+
+        return () => {
+            setFetched(false);
+        }
+
+        
+      }, [products, pagination, type]);
 
     const paginate = () => {
         if(pagination <= products.length){
@@ -79,24 +96,25 @@ export const Catalog: React.FC<Props>  = ({type}) => {
                                 <div className="dropdown">
                                     <button className="dropbtn"><a className='DropdownText'>Type</a> <KeyboardArrowDownIcon /></button>
                                     <div className="dropdown-content">
-                                        <a href="#">T-Shirt</a>
-                                        <a href="#">Shirt</a>
-                                        <a href="#">Skirt</a>
-                                        <a href="#">Shoes</a>
-                                        <a href="#">Jeans</a>
-                                        <a href="#">Dress</a>
+                                        <button >T-Shirt</button>
+                                        <button >Shirt</button>
+                                        <button >Skirt</button>
+                                        <button >Shoes</button>
+                                        <button >Jeans</button>
+                                        <Link to="/catalog/dress">dress</Link>
                                     </div>
                                 </div>
 
                                 <div className="dropdown">
                                     <button className="dropbtn"><a className='DropdownText'>Color</a> <KeyboardArrowDownIcon /></button>
                                     <div className="dropdown-content">
-                                        <a href="#">White</a>
-                                        <a href="#">Black</a>
-                                        <a href="#">Red</a>
-                                        <a href="#">Yellow</a>
-                                        <a href="#">Green</a>
-                                        <a href="#">Blue</a>
+                                        <Link to="/catalog/white">white</Link>
+                                        <button >Black</button>
+                                        <button >Red</button>
+                                        <button >Yellow</button>
+                                        <button >Green</button>
+                                        <button >Blue</button>
+                                        <button >Purple</button>
                                     </div>
                                 </div>
 

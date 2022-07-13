@@ -1,4 +1,6 @@
 .NavContainer {
+    display: flex;
+    justify-content: center;
     background-color: black;
 }
 
@@ -16,6 +18,12 @@
 
 .MobileButtons{
     display: none;
+}
+
+.emptyCart {
+    text-align: center;
+    color: rgb(196, 196, 196);
+    font-family: 'Oxygen', sans-serif;
 }
 
 
