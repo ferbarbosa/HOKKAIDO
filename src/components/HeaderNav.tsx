@@ -20,7 +20,6 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 
 import '../styles/nav.css';
 
-
 export default function HeaderNav() {
 
         const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
@@ -40,6 +39,12 @@ export default function HeaderNav() {
         const closeCart = () => {
             setAnchorEl(null);
         };
+
+        const goToRegister = () => {
+            handleCloseLogin();
+            window.location.href = '/auth/register';
+        }
+
 
         const open = Boolean(anchorEl);
         const id = open ? 'simple-popover' : undefined;
@@ -137,7 +142,6 @@ export default function HeaderNav() {
                     <Link className="NavOption" to="/catalog/t-shirt">T-SHIRTS</Link>
                     <Link className="NavOption" to="/catalog/dress">DRESSES</Link>
                     <Link className="NavOption" to="/catalog/shoes">SHOES</Link>
-                    <Link className="NavOption" to="/about">ABOUT</Link>
 
                     <div className="NavMobile">
 
@@ -305,7 +309,7 @@ export default function HeaderNav() {
                                 Login
                             </p>
                         </button>
-                        <p>Don't have account? <Link className="registerLinkTxt" to="/auth/register">Register now!</Link></p>
+                        <p>Don't have account? <button onClick={goToRegister} className="register-button" >Register now!</button></p>
                     </Box>
                 </Modal>
             
