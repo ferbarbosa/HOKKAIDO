@@ -21,6 +21,8 @@ interface Item {
   size:Array<any>;
   color:Array<any>;
   description: string;
+  selectedColor: string;
+  selectedSize: string;
 };
 
 interface Props {
@@ -30,9 +32,9 @@ interface Props {
 
 export const ProductPage  = () => {
 
-  const [item, setItem] = useState<Item>({name: 'Title', cover: ['img'], price: '99.99', size: [''], color: [''], description: ''});
-  const [selectedColor, setselectedColor] = useState<string>('white');
-  const [selectedSize, setSelectedSize] = useState<string>('P');
+  const [item, setItem] = useState<Item>({name: 'Title', cover: ['img'], price: '99.99', size: [''], color: [''], description: '', selectedColor: '', selectedSize: ''});
+  const [selectedColor, setselectedColor] = useState<string>('');
+  const [selectedSize, setSelectedSize] = useState<string>('');
   const [selectedPreview, setSelectedPreview] = useState<string>('img')
 
   const [credCardPrice, setCredCardPrice] = useState<string>('0');
@@ -56,7 +58,9 @@ export const ProductPage  = () => {
         price: response.data.price,
         size: response.data.size,
         color: response.data.color,
-        description: response.data.description
+        description: response.data.description,
+        selectedColor: '',
+        selectedSize: ''
       });
 
       setSelectedPreview(response.data.img[0]);
@@ -75,23 +79,33 @@ export const ProductPage  = () => {
   
 
 
-  const addFavorite = (item:Item) => {
+  const addToCart = (item:Item) => {
 
-    const items = localStorage.getItem("FAVORITE_LIST");
+    const items = localStorage.getItem("CART_LIST");
 
     if(items){
       const arrayItems = JSON.parse(items);
       const putInOne = [...arrayItems,item];
       const newItems = JSON.stringify(putInOne);
-      localStorage.setItem("FAVORITE_LIST",newItems);
+      localStorage.setItem("CART_LIST",newItems);
 
     }else{
-      localStorage.setItem("FAVORITE_LIST", JSON.stringify([item]));
+      localStorage.setItem("CART_LIST", JSON.stringify([item]));
     }
   }
 
   const changeColor = (color:string) => {
     setselectedColor(color);
+    setItem({
+      name: item.name,
+      cover: item.cover,
+      price: item.price,
+      size: item.size,
+      color: item.color,
+      description: item.description,
+      selectedColor: color,
+      selectedSize: item.selectedSize
+    });
   }
 
   const changePreview = (preview:string) => {
@@ -103,6 +117,16 @@ export const ProductPage  = () => {
     newSize: string,
   ) => {
     setSelectedSize(newSize);
+    setItem({
+      name: item.name,
+      cover: item.cover,
+      price: item.price,
+      size: item.size,
+      color: item.color,
+      description: item.description,
+      selectedColor: item.selectedColor,
+      selectedSize: newSize
+    });
   };
 
   return (
@@ -214,7 +238,7 @@ export const ProductPage  = () => {
             </Grid>
             
             <Grid  item xs={10} >
-              <button className="addToCartButton"><p className="cartButtonTxt" onClick={() => addFavorite(item)}>Add to cart</p></button>
+              <button className="addToCartButton"><p className="cartButtonTxt" onClick={() => addToCart(item)}>Add to cart</p></button>
             </Grid>
             <Grid item xs={2} >
               <button className="addFavoriteButton"><FavoriteBorderIcon className="addFavoriteHeart" /></button>

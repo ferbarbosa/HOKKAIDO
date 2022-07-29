@@ -28,6 +28,7 @@ export default function HeaderNav() {
         const [cartItems, setCartItems] = useState<Array<any>>([]);
         const [totalItemsCart, settotalItemsCart] = useState<number>(0)
         const [totalCartValue, settotalCartValue] = useState<string>('0');
+        
 
         const handleOpenLogin = () => setOpenLogin(true);
         const handleCloseLogin = () => setOpenLogin(false);
@@ -59,7 +60,7 @@ export default function HeaderNav() {
         }
 
         useEffect(() => {
-            const localItems = localStorage.getItem('FAVORITE_LIST');
+            const localItems = localStorage.getItem('CART_LIST');
             
 
             if(localItems){
@@ -188,16 +189,21 @@ export default function HeaderNav() {
                     <Divider color="black" size={1} type="dotted" />
                     
                         {totalItemsCart > 0 ? 
-                            cartItems.map((item,index) => (
-
+                            cartItems.map((item,index) => ((
+                                    <div>
                                     <CartItem 
                                         key={index}
+                                        id={index}
                                         name={item.name} 
                                         cover={item.cover[0]} 
                                         price={item.price} 
                                         quantity={1} 
+                                        selectedColor={item.selectedColor}
+                                        selectedSize={item.selectedSize}
                                     />
-                            ))
+                                    
+                                    </div>
+                            )))
 
                         : <h1 className='emptyCart'>EMPTY</h1>
                             

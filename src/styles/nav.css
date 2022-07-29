@@ -198,3 +198,12 @@
 .register-button:hover{
     color: rgb(72, 190, 68);
 }
+
+.removeItem {
+    border: none;
+    background-color: transparent;
+    font-family: 'Oxygen', sans-serif;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: end;
+}
