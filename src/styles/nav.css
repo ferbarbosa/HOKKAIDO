@@ -207,3 +207,10 @@
     cursor: pointer;
     text-align: end;
 }
+
+.failLoginTxt{
+    font-family: 'Oxygen', sans-serif;
+    color: red;
+    font-weight: 700;
+    font-size: 12px;
+}

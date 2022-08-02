@@ -13,10 +13,15 @@ import CartItem from '../components/CartItem';
 import Divider from '../components/Divider';
 
 
+//Services
+import api from "../services/api";
+
+
 //Icons
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 import '../styles/nav.css';
 
@@ -28,6 +33,11 @@ export default function HeaderNav() {
         const [cartItems, setCartItems] = useState<Array<any>>([]);
         const [totalItemsCart, settotalItemsCart] = useState<number>(0)
         const [totalCartValue, settotalCartValue] = useState<string>('0');
+        const [email, setemail] = useState<string>('');
+        const [password, setpassword] = useState<string>('');
+        const [user, setUser] = useState<any>(false);
+
+        const [loginError, setLoginError] = useState<boolean>(false);
         
 
         const handleOpenLogin = () => setOpenLogin(true);
@@ -58,6 +68,33 @@ export default function HeaderNav() {
             }
             
         }
+        
+
+        const handleLogin = (event:any) => {
+            setLoginError(false);
+            event.preventDefault();
+            api.post('/auth',{email, password})
+            .then(function (response:any) {
+                if(response.data.email){
+                    localStorage.setItem("CURRENT_USER", email);
+                    window.location.href = '/';
+                }
+                
+            })
+            .catch(function (error:any) {
+                console.log(error);
+                setLoginError(true);
+                setemail('');
+                setpassword('');
+            })
+
+            
+        }
+
+        const handleLogout = () => {
+            localStorage.removeItem("CURRENT_USER");
+            window.location.href = '/';
+        }
 
         useEffect(() => {
             const localItems = localStorage.getItem('CART_LIST');
@@ -70,6 +107,7 @@ export default function HeaderNav() {
             }
 
             settotalItemsCart(cartItems.length);
+            console.log(user);
 
             
             
@@ -85,6 +123,25 @@ export default function HeaderNav() {
           
         }, [totalItemsCart])
         
+
+        useEffect(() => {
+            const localUser = localStorage.getItem('CURRENT_USER');
+            if(localUser){
+                setUser(localUser);
+            }else{
+                setUser(false);
+            }
+        } , [])
+
+        const openFavorite = () => {
+            const localUser = localStorage.getItem('CURRENT_USER');
+
+            if(localUser){
+                console.log("favorite page");
+            }else{
+                window.location.href = '/auth/login';
+            }
+        }
         
 
         
@@ -108,14 +165,25 @@ export default function HeaderNav() {
                         </a>
 
                         <div className="MenuButton">
-                            <a>Wellcome to HOKKAIDO</a>
-                            <IconButton onClick={handleOpenLogin} sx={{ p: 1 }}>
-                                <AccountCircleIcon />
-                            </IconButton >
+                            <a>
+                                Wellcome to HOKKAIDO {user ? user : null}
+
+                            </a>
+                            { user ?
+                            
+                                <IconButton onClick={handleLogout}>
+                                    <LogoutIcon />
+                                </IconButton>
+                                :
+                                <IconButton onClick={handleOpenLogin} sx={{ p: 1 }}>
+                                    <AccountCircleIcon />
+                                </IconButton >
+                            }
+                            
                             <IconButton sx={{ p: 1 }} onClick={openCart}>
                                 <ShoppingCartIcon />
                             </IconButton >
-                            <IconButton sx={{ p: 1}} >
+                            <IconButton sx={{ p: 1}} onClick={openFavorite}>
                                 <FavoriteIcon />
                             </IconButton>
                         </div>
@@ -263,16 +331,23 @@ export default function HeaderNav() {
                         <p className="loginTitleTxt">Login to your account:</p>
                         <Box
                         component="form"
+                        onSubmit={handleLogin}
                         sx={{
                             '& .MuiTextField-root': { width: '100%',},
                         }}
                         noValidate
                         autoComplete="off"
                         >
+                            {
+                                loginError ? <p className="failLoginTxt">Email or password incorrect</p> : null
+                            }
                             <TextField
-                                helperText="Please enter your username"
-                                id="username"
-                                label="Username"
+                                helperText="Please enter your email"
+                                id="email"
+                                label="Email"
+                                value={email} 
+                                onChange={(e) => setemail(e.target.value)}
+                                error={loginError}
                                 sx={{
                                     '& label.Mui-focused': {
                                         color: 'black',
@@ -292,7 +367,10 @@ export default function HeaderNav() {
                                 id="password"
                                 label="Password"
                                 type="password"
+                                value={password} 
+                                onChange={(e) => setpassword(e.target.value)}
                                 autoComplete="current-password"
+                                error={loginError}
                                 sx={{
                                     marginTop: 1,
                                     '& label.Mui-focused': {
@@ -308,14 +386,18 @@ export default function HeaderNav() {
                                       },
                                 }}
                             />
+                            
+
+                            <button className="loginButton" type="submit">
+                                <p className="loginTxt">
+                                    Login
+                                </p>
+                            </button>
 
                         </Box>
-                        <button className="loginButton">
-                            <p className="loginTxt">
-                                Login
-                            </p>
-                        </button>
+
                         <p>Don't have account? <button onClick={goToRegister} className="register-button" >Register now!</button></p>
+                        
                     </Box>
                 </Modal>
             
