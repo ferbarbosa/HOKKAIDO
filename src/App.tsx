@@ -8,6 +8,8 @@ import Catalog from './pages/Catalog';
 import HeaderNav from './components/HeaderNav';
 import Footer from './components/Footer';
 import Auth from './pages/Auth';
+import Dashboard from './pages/Dashboard';
+import Orders from './pages/Orders'
 
 function App() {
   return (
@@ -19,6 +21,7 @@ function App() {
         <Route path="product/:id" element={<ProductPage />} />
         <Route path="catalog/:type" element={<Catalog />} />
         <Route path="auth/:type" element={<Auth />} />
+        <Route path="account/orders" element={<Orders />} />
         {/* 
         <Route path="catalog/female" element={<Catalog type="female" />} />
         <Route path="catalog/t-shirt" element={<Catalog type="t-shirt" />} />
