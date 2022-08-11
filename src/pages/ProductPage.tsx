@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
 import ToggleButton from '@mui/material/ToggleButton';
@@ -15,11 +15,11 @@ import StraightenIcon from '@mui/icons-material/Straighten';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 interface Item {
-  name:string;
-  cover:Array<any>;
-  price:string;
-  size:Array<any>;
-  color:Array<any>;
+  name: string;
+  cover: Array<any>;
+  price: string;
+  size: Array<any>;
+  color: Array<any>;
   description: string;
   selectedColor: string;
   selectedSize: string;
@@ -30,72 +30,91 @@ interface Props {
 }
 
 
-export const ProductPage  = () => {
+export const ProductPage = () => {
 
-  const [item, setItem] = useState<Item>({name: 'Title', cover: ['img'], price: '99.99', size: [''], color: [''], description: '', selectedColor: '', selectedSize: ''});
+  const [item, setItem] = useState<Item>({ name: 'Title', cover: ['img'], price: '99.99', size: [''], color: [''], description: '', selectedColor: '', selectedSize: '' });
   const [selectedColor, setselectedColor] = useState<string>('');
   const [selectedSize, setSelectedSize] = useState<string>('');
   const [selectedPreview, setSelectedPreview] = useState<string>('img')
 
   const [credCardPrice, setCredCardPrice] = useState<string>('0');
+  const [showError, setShowError] = useState<boolean>(false);
+  const [errorText, setErrorText] = useState<any>({ type: '', message: '' });
 
-  
+
 
   const URLParams = useParams();
-  
+
 
   //const axios = require('axios');
 
   useEffect(() => {
     console.log(URLParams)
     //tenho que arrumar
-    api.get('/items/'+URLParams.id)
-    .then(function (response:any) {
-      // handle success
-      setItem({
-        name: response.data.title,
-        cover: response.data.img,
-        price: response.data.price,
-        size: response.data.size,
-        color: response.data.color,
-        description: response.data.description,
-        selectedColor: '',
-        selectedSize: ''
-      });
+    api.get('/items/' + URLParams.id)
+      .then(function (response: any) {
+        // handle success
+        setItem({
+          name: response.data.title,
+          cover: response.data.img,
+          price: response.data.price,
+          size: response.data.size,
+          color: response.data.color,
+          description: response.data.description,
+          selectedColor: '',
+          selectedSize: ''
+        });
 
-      setSelectedPreview(response.data.img[0]);
-      setSelectedSize(response.data.size[0]);
-      setselectedColor(response.data.color[0]);
+        setSelectedPreview(response.data.img[0]);
 
-      const credValue = (Number(response.data.price) / 4) * 0.9;
 
-      setCredCardPrice(credValue.toFixed(2));
-    })
-    .catch(function (error:any) {
-      // handle error
-      console.log(error);
-    })
+        const credValue = (Number(response.data.price) / 4) * 0.9;
+
+        setCredCardPrice(credValue.toFixed(2));
+      })
+      .catch(function (error: any) {
+        // handle error
+        console.log(error);
+      })
   }, [])
-  
 
 
-  const addToCart = (item:Item) => {
+
+  const addToCart = (item: Item) => {
 
     const items = localStorage.getItem("CART_LIST");
 
-    if(items){
+    if (item.selectedColor === '' || !item.selectedColor) {
+      setShowError(true);
+      setErrorText({
+        type: 'color',
+        message: 'Please select a color'
+      });
+      return;
+    } else if (item.selectedSize === '' || !item.selectedSize) {
+      setShowError(true);
+      setErrorText({
+        type: 'size',
+        message: 'Please select a size'
+      });
+      return;
+    }
+    if (items) {
       const arrayItems = JSON.parse(items);
-      const putInOne = [...arrayItems,item];
+      const putInOne = [...arrayItems, item];
       const newItems = JSON.stringify(putInOne);
-      localStorage.setItem("CART_LIST",newItems);
+      localStorage.setItem("CART_LIST", newItems);
+      window.dispatchEvent(new Event("storage"));
 
-    }else{
+    } else {
       localStorage.setItem("CART_LIST", JSON.stringify([item]));
+      window.dispatchEvent(new Event("storage"));
     }
   }
 
-  const changeColor = (color:string) => {
+  const changeColor = (color: string) => {
     setselectedColor(color);
+    setShowError(false);
     setItem({
       name: item.name,
       cover: item.cover,
@@ -108,7 +127,7 @@ export const ProductPage  = () => {
     });
   }
 
-  const changePreview = (preview:string) => {
+  const changePreview = (preview: string) => {
     setSelectedPreview(preview);
   }
 
@@ -117,6 +136,7 @@ export const ProductPage  = () => {
     newSize: string,
   ) => {
     setSelectedSize(newSize);
+    setShowError(false);
     setItem({
       name: item.name,
       cover: item.cover,
@@ -131,57 +151,102 @@ export const ProductPage  = () => {
 
   return (
     <Container>
-      <Grid 
-        container spacing={1} 
+      <Grid
+        container spacing={1}
         justifyContent="center"
       >
-        <Grid item xs={1}>
+        <Grid item xs={12} md={1} 
+          sx={{
+            ['@media (max-width:899px)']: {
+              display: 'none'
+            }
+          }}
+        >
           {
-            item.cover.map((cover) => 
-              <button 
-                className="selectPreviewButton" 
-                onClick={() => changePreview(cover)} 
-              > 
-                <img 
-                  className="selectPreviewImg" 
-                  src={cover} 
-                /> 
+            item.cover.map((cover) =>
+              <button
+                className="selectPreviewButton"
+                onClick={() => changePreview(cover)}
+              >
+                <img
+                  className="selectPreviewImg"
+                  src={cover}
+                />
               </button>)
-          
+
           }
         </Grid>
-        <Grid className="imgBox" item xs={6} sx={{'&.MuiGrid-item': {padding: '30px', paddingTop: '20px'}}}>
-          <img className="mainImg" src={selectedPreview}/>
+        <Grid 
+          className="imgBox" item xs={12} md={6} 
+          sx={{ 
+            '&.MuiGrid-item': {
+              padding: '30px', 
+              paddingTop: '20px' 
+            },
+          }}>
+          <img className="mainImg" src={selectedPreview} />
           <Typography variant="caption" display="block" gutterBottom>
             Click on the image to zoom in
           </Typography>
         </Grid>
 
-        <Grid item xs={5} sx={{'&.MuiGrid-item': {padding: '30px', paddingTop: '8px'}}}>
+        {/* mobile version */}
+        <Grid item xs={12} md={1} 
+          sx={{
+            ['@media (min-width:900px)']: {
+              display: 'none'
+            }
+          }}
+        >
+          {
+            item.cover.map((cover) =>
+              <button
+                className="selectPreviewButton"
+                onClick={() => changePreview(cover)}
+              >
+                <img
+                  className="selectPreviewImg"
+                  src={cover}
+                />
+              </button>)
+
+          }
+        </Grid>
+        
+
+        <Grid item xs={12} md={5} 
+          sx={{ '&.MuiGrid-item': { padding: '30px', paddingTop: '8px' } 
+        }}>
 
           <h1 className="nameTxt" >
             {item.name}
           </h1>
 
           <p className="labelTxt">
-            Select the color: 
-              <span className="selectedTxt">
-                {selectedColor}
-              </span>
+            Select the color:
+            <span className="selectedTxt">
+              {selectedColor}
+            </span>
           </p>
+          {
+            showError && errorText.type === 'color' ? <p className="errorTxt">{errorText.message}</p> : null
+          }
 
           <div>
             {
-              item.color.map((color) => <button className="colorSelect" style={{backgroundColor: color}} onClick={() => changeColor(color)} ></button>)
+              item.color.map((color) => <button className="colorSelect" style={{ backgroundColor: color }} onClick={() => changeColor(color)} ></button>)
             }
           </div>
 
           <p className="labelTxt">
-            Select the size: 
-              <span className="selectedTxt" >
-                {selectedSize}
-              </span>
+            Select the size:
+            <span className="selectedTxt" >
+              {selectedSize}
+            </span>
           </p>
+          {
+            showError && errorText.type === 'size' ? <p className="errorTxt">{errorText.message}</p> : null
+          }
 
           <ToggleButtonGroup
             value={selectedSize}
@@ -190,10 +255,10 @@ export const ProductPage  = () => {
           >
 
             {
-              item.size.map((size) => 
-                <ToggleButton 
+              item.size.map((size) =>
+                <ToggleButton
                   sx={{
-                    color: 'black', 
+                    color: 'black',
                     '&.Mui-selected': {
                       backgroundColor: 'black',
                       color: 'white',
@@ -202,14 +267,14 @@ export const ProductPage  = () => {
                       backgroundColor: 'black',
                       color: 'white',
                     },
-                  }} 
+                  }}
                   value={size} >{size}
                 </ToggleButton>)
             }
 
           </ToggleButtonGroup>
-          
-          <div 
+
+          <div
             style={{
               marginTop: '20px',
               display: 'flex',
@@ -218,12 +283,12 @@ export const ProductPage  = () => {
             }}
           >
             <StraightenIcon />
-            <Typography variant="caption" sx={{	fontWeight: 400}}>Size table</Typography>
+            <Typography variant="caption" sx={{ fontWeight: 400 }}>Size table</Typography>
 
           </div>
 
-          <Grid 
-            container spacing={1} 
+          <Grid
+            container spacing={1}
             alignItems="center"
             className="priceBox"
           >
@@ -236,8 +301,8 @@ export const ProductPage  = () => {
               <p>Credit card 4x ${credCardPrice}</p>
               <p>10% Off</p>
             </Grid>
-            
-            <Grid  item xs={10} >
+
+            <Grid item xs={10} >
               <button className="addToCartButton"><p className="cartButtonTxt" onClick={() => addToCart(item)}>Add to cart</p></button>
             </Grid>
             <Grid item xs={2} >
@@ -245,7 +310,7 @@ export const ProductPage  = () => {
             </Grid>
 
           </Grid>
-          
+
         </Grid>
         <Grid item xs={12} >
           <p className="labelTxt">

@@ -31,11 +31,17 @@ export const Catalog: React.FC = () => {
     const [orderBy, setOrderBy] = useState<number>(1);
     const [selectedSort, setSelectedSort] = useState<string>("Newest");
     const [loading, setLoading] = useState<boolean>(false);
+    const [filterColor, setFilterColor] = useState<string>("");
+    const [filterSize, setFilterSize] = useState<string>('');
+    const [filterType, setFilterType] = useState<string>("");
 
     const { type } = useParams();
 
     useEffect(() => {
         setLoading(true);
+        setFilterSize('');
+        setFilterType('');
+        setFilterColor('');
     }, [type]);
 
     useEffect(() => {
@@ -43,7 +49,7 @@ export const Catalog: React.FC = () => {
 
             setFetched(true);
 
-            api.get('/catalog?tag=' + type + '&sort=' + sort + '&orderBy=' + orderBy+ '&limit=' + pagination)
+            api.get('/catalog?tag=' + type + filterType + filterColor +'&sort=' + sort + '&orderBy=' + orderBy + '&limit=' + pagination)
                 .then(function (response: any) {
                     products.push(response.data);
 
@@ -66,7 +72,11 @@ export const Catalog: React.FC = () => {
         }
 
 
-    }, [products, pagination, type, sort, orderBy]);
+    }, [products, pagination, type, sort, orderBy, filterColor, filterType, filterSize]);
+
+    useEffect(() => {
+        setPagination(8);
+    }, [type]);
 
     const paginate = () => {
         if (pagination <= products.length) {
@@ -99,38 +109,37 @@ export const Catalog: React.FC = () => {
                             <div className="dropdown">
                                 <button className="dropbtn"><a className='DropdownText'>Size</a> <KeyboardArrowDownIcon /></button>
                                 <div className="dropdown-content">
-                                    <FormGroup>
-                                        <FormControlLabel control={<Checkbox defaultChecked />} label="P" />
-                                        <FormControlLabel control={<Checkbox defaultChecked />} label="M" />
-                                        <FormControlLabel control={<Checkbox defaultChecked />} label="G" />
-                                        <FormControlLabel control={<Checkbox defaultChecked />} label="GG" />
-                                        <FormControlLabel control={<Checkbox defaultChecked />} label="XG" />
-                                    </FormGroup>
+                                    <button onClick={() => setFilterSize('P')}>P</button>
+                                    <button onClick={() => setFilterSize('M')}>M</button>
+                                    <button onClick={() => setFilterSize('G')}>G</button>
+                                    <button onClick={() => setFilterSize('GG')}>GG</button>
+                                    <button onClick={() => setFilterSize('XG')}>XG</button>
+                                    <button onClick={() => setFilterSize('XXG')}>XXG</button>
                                 </div>
                             </div>
 
                             <div className="dropdown">
                                 <button className="dropbtn"><a className='DropdownText'>Type</a> <KeyboardArrowDownIcon /></button>
                                 <div className="dropdown-content">
-                                    <button >T-Shirt</button>
-                                    <button >Shirt</button>
-                                    <button >Skirt</button>
-                                    <button >Shoes</button>
-                                    <button >Jeans</button>
-                                    <Link to="/catalog/dress">dress</Link>
+                                    <button onClick={() => setFilterType(',tank')}>Tank top</button>
+                                    <button onClick={() => setFilterType(',shirt')}>Shirt</button>
+                                    <button onClick={() => setFilterType(',skirt')}>Skirt</button>
+                                    <button onClick={() => setFilterType(',shoes')}>Shoes</button>
+                                    <button onClick={() => setFilterType(',jeans')}>Jeans</button>
+                                    <button onClick={() => setFilterType(',dress')}>dress</button>
                                 </div>
                             </div>
 
                             <div className="dropdown">
                                 <button className="dropbtn"><a className='DropdownText'>Color</a> <KeyboardArrowDownIcon /></button>
                                 <div className="dropdown-content">
-                                    <Link to="/catalog/white">white</Link>
-                                    <button >Black</button>
-                                    <button >Red</button>
-                                    <button >Yellow</button>
-                                    <button >Green</button>
-                                    <button >Blue</button>
-                                    <button >Purple</button>
+                                    <button onClick={() => setFilterColor(',white')}>white</button>
+                                    <button onClick={() => setFilterColor(',black')} >Black</button>
+                                    <button onClick={() => setFilterColor(',red')} >Red</button>
+                                    <button onClick={() => setFilterColor(',yellow')}>Yellow</button>
+                                    <button onClick={() => setFilterColor(',green')}>Green</button>
+                                    <button onClick={() => setFilterColor(',blue')}>Blue</button>
+                                    <button onClick={() => setFilterColor(',purple')}>Purple</button>
                                 </div>
                             </div>
 
@@ -142,10 +151,10 @@ export const Catalog: React.FC = () => {
                                 <button className="dropbtn"><a className='DropdownText'>{selectedSort}</a> <KeyboardArrowDownIcon /></button>
                                 <div className="dropdown-content">
                                     <a href="#">Sale</a>
-                                    <button onClick={() => changeSorting("createdAt", 1, "Newest")}>Newest</button>
-                                    <button onClick={() => changeSorting("createdAt", -1, "Oldest")}>Oldest</button>
-                                    <button onClick={() => changeSorting("price", 1, "Lowest price")}>Lowest price</button>
-                                    <button onClick={() => changeSorting("price", -1, "Highest price")}>Highest price</button>
+                                    <button onClick={() => changeSorting("createdAt", -1, "Newest")}>Newest</button>
+                                    <button onClick={() => changeSorting("createdAt", 1, "Oldest")}>Oldest</button>
+                                    <button onClick={() => changeSorting("price", -1, "Lowest price")}>Lowest price</button>
+                                    <button onClick={() => changeSorting("price", 1, "Highest price")}>Highest price</button>
                                 </div>
                             </div>
                         </div>
@@ -158,7 +167,7 @@ export const Catalog: React.FC = () => {
                     container spacing={1} justifyContent="center"
                 >
                     {
-                        !products.length || loading ?
+                        !products.length && loading ?
                             <div
                                 className="LoadingArea"
                             >
@@ -188,25 +197,28 @@ export const Catalog: React.FC = () => {
                                 </motion.span>
                             </div>
                             :
-                            products.filter((product, index) => index < pagination).map((product, index) => (
-                                <Grid item xs={12} sm={6} md={3} key={index}>
-                                    <Link to={'/product/' + product[index].itemId} style={{ textDecoration: 'none' }} >
-                                        <motion.div
-                                            key={type}
-                                            initial={{ opacity: 0.2 }}
-                                            animate={{ opacity: 1 }}
-                                            transition={{ duration: 0.9 }}
-                                        >
-                                            <ItemCard
-                                                name={product[index].title}
-                                                cover={product[index].img[0]}
-                                                price={product[index].price}
-                                            />
-                                        </motion.div>
-                                    </Link>
-                                </Grid>
+                            !products.length ? <p>Itens não encontrados</p>
+                                :
+                                products.filter((product, index) => index < pagination).map((product, index) => (
+                                    <Grid item xs={12} sm={6} md={3} key={index}>
+                                        <Link to={'/product/' + product[index].itemId} style={{ textDecoration: 'none' }} >
+                                            <motion.div
+                                                key={type}
+                                                initial={{ opacity: 0.2 }}
+                                                animate={{ opacity: 1 }}
+                                                transition={{ duration: 0.9 }}
+                                            >
+                                                <ItemCard
+                                                    name={product[index].title}
+                                                    cover={product[index].img[0]}
+                                                    price={product[index].price}
+                                                />
+                                            </motion.div>
+                                        </Link>
+                                    </Grid>
 
-                            ))
+                                ))
+
                     }
 
                 </Grid>

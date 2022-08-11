@@ -32,8 +32,11 @@
   .PopularText {
     font-size: 25px;
     text-align: center;
+    font-family: 'Oxygen', sans-serif;
     text-transform: uppercase;
     font-weight: 600;
+    color: rgb(41, 41, 41);
+    margin-top: 50px;
   }
   
   .PopularMobile{

@@ -70,6 +70,18 @@
 
     .MobileButtons{
         display: block;
+        position: absolute;
+        margin-left: -80%;
+        margin-top: 10%;
+        z-index: 100;
+    } 
+    
+    .MobileDrawerContent{
+        justify-content: center;
+        display: flex;
+        flex-direction: column;
+        margin-left: auto;
+        width: 100%;
     }
 
     .NavOption{
@@ -248,7 +260,7 @@
     padding: 10px;
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
+    z-index: 100;
     border: solid rgb(218, 218, 218) 1px;
   }
   
@@ -292,4 +304,85 @@
   .wellcomeTxt{
     font-family: 'Oxygen', sans-serif;
     font-size: 14px;
+    text-align: start;
+  }
+
+  .MobileDrawerButton {
+    border: none;
+    font-family: 'Oxygen', sans-serif;
+    font-weight: 700;
+    cursor: pointer;
+    padding-right: 70px;
+    background-color: transparent;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    margin-left: 5px;
+  }
+
+  .MobileDrawerButton p {
+    font-family: 'Oxygen', sans-serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: black;
+    text-align: start;
+    margin-left: 10px;
+  }
+
+  .MobileIconsButtons{
+    display: flex;
+    justify-content: space-around;
+    margin-top: 10%;
+  }
+
+  .MobileUserArea {
+    background-color: rgba(0,0,0,0.9);
+    padding-bottom: 10px;
+  }
+
+  .MobileUserName{
+    font-family: 'Oxygen', sans-serif;
+    font-size: 17px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color:rgb(196, 196, 196);
+    text-align: center;
+  }
+
+  .MobileUserBox {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    border: none;
+  }
+
+  .MobileUserEmail{
+    font-family: 'Oxygen', sans-serif;
+    font-size: 10px;
+    color:rgb(196, 196, 196);
+    text-align: center;
+    margin-top:-15px;
+  }
+  .MobileUserOptions{
+    display: flex;
+    flex-direction: column;
+  }
+
+  .MobileUserOptions a{
+    color:rgb(196, 196, 196);
+    text-decoration: none;
+    margin-bottom: 5px;
+    margin-left: 5px;
+    text-transform: uppercase;
+    font-size: 13px;
+    margin-top: 5px;
+  }
+
+  .MobileUserOptions div{
+    display: flex;
+    align-items: center;
+    margin-left: 5px;
+    padding: 5px;
   }

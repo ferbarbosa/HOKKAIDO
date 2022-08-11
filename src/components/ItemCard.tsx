@@ -22,10 +22,22 @@ const ItemCard: React.FC<Props> = ({name, cover, price}) => {
           alt="Product Image"
         />
         <CardContent>
-          <Typography variant="body2" color="text.secondary">
+          <Typography variant="body2" color="text.secondary" 
+            sx={{
+              fontFamily:'Oxygen , sans-serif',
+              fontWeight:'bold',
+            }}
+          >
               {name ? name : "A name here"}
           </Typography>
-          <a>${price ? price : "00.00"}</a>
+          <a style={{
+            fontFamily:'Oxygen , sans-serif',
+            fontSize:'1.5rem',
+            fontWeight:'bold',
+          }}
+          >
+            ${price ? price : "00.00"}
+          </a>
         </CardContent>
       </CardActionArea>
     </Card>

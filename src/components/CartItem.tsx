@@ -21,6 +21,7 @@ export const CartItem: React.FC<Props>  = ({id,name, cover, price, quantity, sel
             let arrayLocalItems = JSON.parse(localItems);
             arrayLocalItems = arrayLocalItems.filter((arrayLocalItem:any) => arrayLocalItem.name !== name);
             localStorage.setItem('CART_LIST', JSON.stringify(arrayLocalItems));
+            window.dispatchEvent(new Event("storage"));
             setremoved(true);
         }
     }

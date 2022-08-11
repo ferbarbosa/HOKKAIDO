@@ -9,6 +9,11 @@ import TextField from '@mui/material/TextField';
 import { Routes, Route, Link, useRoutes } from "react-router-dom";
 import { motion } from "framer-motion"
 
+//mobile menu
+import Drawer from '@mui/material/Drawer';
+import Button from '@mui/material/Button';
+import MenuIcon from '@mui/icons-material/Menu';
+
 //My components
 import CartItem from '../components/CartItem';
 import Divider from '../components/Divider';
@@ -24,6 +29,10 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import LogoutIcon from '@mui/icons-material/Logout';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import InventoryIcon from '@mui/icons-material/Inventory';
+import LoyaltyIcon from '@mui/icons-material/Loyalty';
+import CheckroomIcon from '@mui/icons-material/Checkroom';
+import HomeIcon from '@mui/icons-material/Home';
 
 import '../styles/nav.css';
 
@@ -41,6 +50,9 @@ export default function HeaderNav() {
     const [searchBar, setSearchBar] = useState<string>('');
     const [authType, setAuthType] = useState<string>('login');
     const [username, setUserName] = useState<string>('');
+    const [mobileDropDownUser, setMobileDropDownUser] = useState<boolean>(false);
+    const [updateCart, setUpdateCart] = useState<boolean>(false);
+
 
     const [loginError, setLoginError] = useState<boolean>(false);
 
@@ -66,14 +78,8 @@ export default function HeaderNav() {
     const id = open ? 'simple-popover' : undefined;
 
     const showMobileMenu = () => {
-        if (!mobileMenu) {
-            setMobileMenu(true);
-        } else {
-            setMobileMenu(false);
-        }
-
+        setMobileMenu(!mobileMenu);
     }
-
 
     const handleLogin = (event: any) => {
         setLoginError(false);
@@ -107,22 +113,37 @@ export default function HeaderNav() {
     }
 
     useEffect(() => {
-        const localItems = localStorage.getItem('CART_LIST');
+        if(!updateCart){
+            const localItems = localStorage.getItem('CART_LIST');
 
 
-        if (localItems) {
-            const arrayLocalItems = JSON.parse(localItems);
-            setCartItems(arrayLocalItems)
+            if (localItems) {
+                const arrayLocalItems = JSON.parse(localItems);
+                setCartItems(arrayLocalItems)
 
+            }
+
+            settotalItemsCart(cartItems.length);
+            setUpdateCart(true);
         }
 
-        settotalItemsCart(cartItems.length);
-        console.log(user);
+        window.addEventListener("storage", (e) => {
+            const localItems = localStorage.getItem('CART_LIST');
 
 
+            if (localItems) {
+                const arrayLocalItems = JSON.parse(localItems);
+                setCartItems(arrayLocalItems)
 
+            }
 
-    }, [anchorEl])
+            settotalItemsCart(cartItems.length);
+        });
+        
+
+        
+
+    }, [anchorEl, cartItems]);
 
     useEffect(() => {
         var total = 0;
@@ -131,7 +152,7 @@ export default function HeaderNav() {
         })
         settotalCartValue(total.toFixed(2));
 
-    }, [totalItemsCart])
+    }, [totalItemsCart, updateCart])
 
 
     useEffect(() => {
@@ -150,13 +171,13 @@ export default function HeaderNav() {
         if (localUser) {
             console.log("favorite page");
         } else {
-            window.location.href = '/auth/login';
+            handleOpenLogin();
         }
     }
 
     const handleRegister = (event: any) => {
         event.preventDefault();
-        api.post('/adduser', { username,email, password })
+        api.post('/adduser', { username, email, password })
             .then(function (response: any) {
                 if (response.data.email) {
                     localStorage.setItem("CURRENT_USER", JSON.stringify({ "email": response.data.email, "userId": response.data.userId, "username": response.data.username }));
@@ -191,11 +212,116 @@ export default function HeaderNav() {
                 alignItems="center"
             >
                 <Box className="LogoAndButtons">
-
                     <div className="MobileButtons">
+                        <IconButton onClick={showMobileMenu}>
+                            <MenuIcon
+                                fontSize="large"
+                            />
+                        </IconButton>
+                        <Drawer
+                            className="MobileDrawer"
+                            anchor={"right"}
+                            open={mobileMenu}
+                            onClose={() => setMobileMenu(false)}
+                            sx={{
+                                '& .css-1160xiw-MuiPaper-root-MuiDrawer-paper': { width: '60%' }
+                            }}
+                        >
+                            <div
+                                className='MobileDrawerContent'
+                            >
+                                <div
+                                    className='MobileUserArea'
+                                >
+                                    {user ?
+                                        <>
+                                            <button className="MobileUserBox" onClick={() => setMobileDropDownUser(!mobileDropDownUser)}>
+                                                <p className='MobileUserName'>
+                                                    {user.username}
+                                                </p>
+                                                <KeyboardArrowDownIcon sx={{ color: 'rgb(196, 196, 196)' }} />
 
+                                            </button>
+                                            <p className='MobileUserEmail'>{user.email}</p>
+
+                                            {
+                                                mobileDropDownUser ?
+                                                    <div className='MobileUserOptions'>
+                                                        <div>
+                                                            <AccountCircleIcon sx={{ color: 'rgb(196, 196, 196)' }} />
+                                                            <a className='MobileDrawerButtonText' href="/account/profile">Profile</a>
+                                                        </div>
+                                                        <div>
+                                                            <InventoryIcon sx={{ color: 'rgb(196, 196, 196)' }} />
+                                                            <a className='MobileDrawerButtonText' href="/account/orders">Orders</a>
+                                                        </div>
+                                                    </div>
+                                                    : null
+
+                                            }
+
+                                        </>
+                                        : null
+                                    }
+                                </div>
+                                <Link
+                                    className='MobileDrawerButton'
+                                    to="/"
+                                >
+                                    <HomeIcon sx={{ color: 'rgba(0,0,0,0.9)' }} />
+                                    <p>
+                                        HOME
+                                    </p>
+                                </Link>
+                                <Link
+                                    className='MobileDrawerButton'
+                                    to="/catalog/sale"
+                                >
+                                    <LoyaltyIcon sx={{ color: 'rgba(0,0,0,0.9)' }} />
+                                    <p>
+                                        SALE
+                                    </p>
+                                </Link>
+                                <Link
+                                    className='MobileDrawerButton'
+                                    to="/catalog/female"
+                                >
+                                    <CheckroomIcon sx={{ color: 'rgba(0,0,0,0.9)' }} />
+                                    <p>
+                                        FEMALE
+                                    </p>
+                                </Link>
+                                <Link
+                                    className='MobileDrawerButton'
+                                    to="/catalog/male"
+                                >
+                                    <CheckroomIcon sx={{ color: 'rgba(0,0,0,0.9)' }} />
+                                    <p>
+                                        MALE
+                                    </p>
+                                </Link>
+                                <div className='MobileIconsButtons'>
+                                    <IconButton onClick={openCart}>
+                                        <ShoppingCartIcon fontSize="large" sx={{ color: 'rgba(0,0,0,0.9)' }} />
+                                    </IconButton>
+                                    <IconButton onClick={openFavorite}>
+                                        <FavoriteIcon fontSize="large" sx={{ color: 'rgba(0,0,0,0.9)' }} />
+                                    </IconButton>
+                                    {
+                                        user ?
+                                            <IconButton onClick={handleLogout}>
+                                                <LogoutIcon fontSize="large" sx={{ color: 'rgba(0,0,0,0.9)' }} />
+                                            </IconButton>
+                                            :
+                                            <IconButton onClick={handleOpenLogin}>
+                                                <AccountCircleIcon fontSize="large" sx={{ color: 'rgba(0,0,0,0.9)' }} />
+                                            </IconButton>
+                                    }
+
+                                </div>
+                            </div>
+                        </Drawer>
                     </div>
-
                     <a className="LogoArea">
                         HOKKAIDO
                     </a>
@@ -223,7 +349,6 @@ export default function HeaderNav() {
                                 <AccountCircleIcon />
                             </IconButton >
                         }
-
                         <IconButton sx={{ p: 1 }} onClick={openCart}>
                             <ShoppingCartIcon />
                         </IconButton >
@@ -260,7 +385,7 @@ export default function HeaderNav() {
                 <Link className="NavOption" to="/">SALE</Link>
                 <Link className="NavOption" to="/catalog/female">FEMALE</Link>
                 <Link className="NavOption" to="/catalog/male">MALE</Link>
-                <Link className="NavOption" to="/catalog/t-shirt">T-SHIRTS</Link>
+                <Link className="NavOption" to="/catalog/shirt">SHIRTS</Link>
                 <Link className="NavOption" to="/catalog/dress">DRESSES</Link>
                 <Link className="NavOption" to="/catalog/shoes">SHOES</Link>
 
@@ -308,7 +433,7 @@ export default function HeaderNav() {
                 </Grid>
                 <Divider color="black" size={1} type="dotted" />
 
-                {totalItemsCart > 0 ?
+                {cartItems.length > 0 ?
                     cartItems.map((item, index) => ((
                         <div>
                             <CartItem
@@ -366,6 +491,13 @@ export default function HeaderNav() {
                 onClose={handleCloseLogin}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
+                sx={{
+                    ['@media (max-width:500px)']: {
+                        '& .css-ppttlb': {
+                            width: '80%'
+                        }
+                    }
+                }}
             >
                 <Box
                     sx={{
@@ -385,9 +517,9 @@ export default function HeaderNav() {
                         authType === 'login' ? (
                             <motion.div
                                 key={authType}
-                                initial={{ opacity: 0.4}}
-                                animate={{ opacity: 1}}
-                                transition={{ duration: 0.9 }}   
+                                initial={{ opacity: 0.4 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ duration: 0.9 }}
                             >
                                 <p className="loginTitleTxt">Login to your account:</p>
                                 <Box
@@ -467,7 +599,7 @@ export default function HeaderNav() {
                                 key={authType}
                                 initial={{ opacity: 0.4 }}
                                 animate={{ opacity: 1 }}
-                                transition={{ duration: 0.9 }}   
+                                transition={{ duration: 0.9 }}
                             >
                                 <p className="loginTitleTxt">Create a new account:</p>
                                 <Box
