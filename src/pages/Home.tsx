@@ -33,6 +33,7 @@ export default function Home() {
 
 
   useEffect(() => {
+    console.log(process.env.REACT_APP_API_KEY);
     if (!fetched) {
 
       setFetched(true);
