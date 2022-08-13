@@ -34,15 +34,25 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-Hokkaido is a imagination of a online clothing store with minimalist design and acessibility.
+Hokkaido is a imagination of a online clothing store with minimalist and responsive design.
 
-What do it have:
+What it have:
 * A carousel with the latest ads and sales.
 * A carousel with the most saled products.
 * Product page with the information.
-* Login modal
-* Shopping cart modal
+  * Some validations for color and size.
+* Catalog page with products.
+  * Filters by color / type.
+  * Sort.
+* Login and register modal.
+* Shopping cart.
+  * Add items.
+  * Remove items.
+  * Total price.
+  * Buy items.
+* Orders page.
 * Footer with some information.
+
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -56,5 +66,11 @@ Here are what i've used in this project.
 * [React](https://reactjs.org)
 * [MUI](https://mui.com)
 * [React Router](https://reactrouter.com)
+* [Framer-motion](framer.com/motion/)
+  * Some cool animations.
+* [React Slick](https://react-slick.neostack.com)
+  * A carousel component.
+* [Axios](https://axios-http.com)
+  * For the api requests.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
