@@ -23,6 +23,7 @@ import banner1 from '../resources/images/banner1.png';
 import banner2 from '../resources/images/banner2.png';
 import banner3 from '../resources/images/banner3.png';
 import banner4 from '../resources/images/banner4.png';
+import { AnyARecord } from 'dns';
 
 
 export default function Home() {
@@ -115,9 +116,9 @@ export default function Home() {
         <div className="Popular">
           <Slider {...PopularSettings}>
             {
-              popular.map((item: any) => {
+              popular.map((item: any, index:any) => {
                 return (
-                  <div className="PopularItem">
+                  <div className="PopularItem" key={index}>
                     <Link to={'/product/' + item.itemId} style={{ textDecoration: 'none' }} >
                       <ItemCard name={item.title} cover={item.img[0]} price={item.price} />
                     </Link>
@@ -132,9 +133,9 @@ export default function Home() {
         <div className="PopularMobile">
           <Slider {...PopularSettingsMobile}>
             {
-              popular.map((item: any) => {
+              popular.map((item: any, index:any) => {
                 return (
-                  <div className="PopularItem">
+                  <div className="PopularItem" key={index}>
                     <Link to={'/product/' + item.itemId} style={{ textDecoration: 'none' }} >
                       <ItemCard name={item.title} cover={item.img[0]} price={item.price} />
                     </Link>

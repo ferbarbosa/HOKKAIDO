@@ -52,8 +52,6 @@ export const ProductPage = () => {
   //const axios = require('axios');
 
   useEffect(() => {
-    console.log(URLParams)
-    //tenho que arrumar
     api.get('/items/' + URLParams.id)
       .then(function (response: any) {
         // handle success
@@ -191,10 +189,11 @@ export const ProductPage = () => {
           }}
         >
           {
-            item.cover.map((cover) =>
+            item.cover.map((cover:any, index:any) =>
               <button
                 className="selectPreviewButton"
                 onClick={() => changePreview(cover)}
+                key={index}
               >
                 <img
                   className="selectPreviewImg"
@@ -227,10 +226,11 @@ export const ProductPage = () => {
           }}
         >
           {
-            item.cover.map((cover) =>
+            item.cover.map((cover:any, index:any) =>
               <button
                 className="selectPreviewButton"
                 onClick={() => changePreview(cover)}
+                key={index}
               >
                 <img
                   className="selectPreviewImg"
@@ -262,7 +262,7 @@ export const ProductPage = () => {
 
           <div>
             {
-              item.color.map((color) => <button className="colorSelect" style={{ backgroundColor: color }} onClick={() => changeColor(color)} ></button>)
+              item.color.map((color:any, index:any) => <button key={index} className="colorSelect" style={{ backgroundColor: color }} onClick={() => changeColor(color)} ></button>)
             }
           </div>
 
@@ -283,8 +283,9 @@ export const ProductPage = () => {
           >
 
             {
-              item.size.map((size) =>
+              item.size.map((size:any, index:any) =>
                 <ToggleButton
+                  key={index}
                   sx={{
                     color: 'black',
                     '&.Mui-selected': {

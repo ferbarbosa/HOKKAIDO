@@ -201,7 +201,6 @@ export default function HeaderNav() {
         }
 
         api.post('/order', data, config).then(function (response: any) {
-            alert("Compra realizada com sucesso!");
             localStorage.removeItem("CART_LIST");
             window.dispatchEvent(new Event("storage"));
             window.location.href = '/account/orders';
@@ -362,7 +361,7 @@ export default function HeaderNav() {
                     </a>
 
                     <div className="MenuButton">
-                        <a className='wellcomeTxt'>
+                        <span className='wellcomeTxt'>
                             Wellcome to HOKKAIDO {
                                 user ? (
                                     <div className="dropdown">
@@ -375,7 +374,7 @@ export default function HeaderNav() {
                                     </div>
                                 ) : null}
 
-                        </a>
+                        </span>
                         {user ?
 
                             null

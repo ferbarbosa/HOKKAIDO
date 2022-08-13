@@ -40,13 +40,21 @@ const OrderCard: React.FC<Props> = ({ cod, status, date, children }) => {
             style={{
               fontSize: '12px',
               fontWeight: 'bold',
-              color: '#000',
+              color: 'rgba(0, 0, 0, 0.5)',
               margin: '5px',
             }}>
             {date}
           </p>
         </div>
         <div>
+          <p
+          style={{
+            fontSize: '12px',
+            fontWeight: 'bold',
+            color: '#000',
+            margin: '5px',
+          }}
+          >Status:</p>
           <p
             style={{
               fontSize: '12px',
@@ -55,7 +63,6 @@ const OrderCard: React.FC<Props> = ({ cod, status, date, children }) => {
               margin: '5px',
             }}
           >
-            Status: 
             <span
               style={{
                 color: {'Waiting Confirmation': 'orange', 'In transit': 'orange', 'Delivered': 'green', 'Canceled' : 'red'}[status],
@@ -81,7 +88,7 @@ const OrderCard: React.FC<Props> = ({ cod, status, date, children }) => {
             style={{
               fontSize: '12px',
               fontWeight: 'bold',
-              color: '#000',
+              color: 'rgba(0, 0, 0, 0.5)',
               margin: '5px',
             }}>
             {cod}
@@ -91,7 +98,6 @@ const OrderCard: React.FC<Props> = ({ cod, status, date, children }) => {
       </div>
 
       {children}
-      <p>See details</p>
     </Card>
   )
 }

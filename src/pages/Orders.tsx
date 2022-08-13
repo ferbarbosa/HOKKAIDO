@@ -4,6 +4,9 @@ import api from '../services/api';
 import Container from '@mui/material/Container';
 import OrderCard from '../components/OrderCard';
 import Grid from '@mui/material/Grid';
+import Divider from '../components/Divider';
+
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 
 import '../styles/orders.css';
 
@@ -63,7 +66,6 @@ export const Orders: React.FC = () => {
                 api.get('/items/?limit=0')
                     .then(function (response: any) {
                         setItems(response.data);
-                        console.log(response.data);
                     }).catch(function (error: any) {
                         console.log(error);
                     });
@@ -81,7 +83,7 @@ export const Orders: React.FC = () => {
         <div>
 
 
-            <Container maxWidth="lg">
+            <Container maxWidth='md'>
                 <p>
                     <Link className='PagesCatalogLink' to="/">Account</Link>
                     /
@@ -99,10 +101,27 @@ export const Orders: React.FC = () => {
                                             if(item.itemId === itemId){
                                                 
                                                 return (
-                                                    <div>
-                                                        <img src={item.img[0]} alt={item.title} key={index} />
-                                                        <p key={index}>{item.title}</p>
-                                                    </div>
+                                                    <span key={index}>
+                                                        <div className='ItemContainer'>
+                                                            <div className='ItemImageAndName'>
+                                                                <img src={item.img[0]} alt={item.title} />
+                                                                <div>
+                                                                    <a href='#' >{item.title}</a>
+                                                                    <p>Devolução até 30 dias após a entrega.</p>
+                                                                    <button>
+                                                                        <AddShoppingCartIcon/>
+                                                                        Comprar novamente
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                            <div className='ItemButtons'>
+                                                                <button>Avaliar produto</button>
+                                                            </div>
+                                                            
+                                                        </div>
+                                                        <Divider color="rgba(0, 0, 0, 0.2)" size={1} type="solid" />
+                                                    </span>
+                                                    
                                                 )
                                             }
                                         })

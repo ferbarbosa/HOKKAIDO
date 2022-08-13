@@ -30,14 +30,14 @@ const ItemCard: React.FC<Props> = ({name, cover, price}) => {
           >
               {name ? name : "A name here"}
           </Typography>
-          <a style={{
+          <span style={{
             fontFamily:'Oxygen , sans-serif',
             fontSize:'1.5rem',
             fontWeight:'bold',
           }}
           >
             ${price ? price : "00.00"}
-          </a>
+          </span>
         </CardContent>
       </CardActionArea>
     </Card>

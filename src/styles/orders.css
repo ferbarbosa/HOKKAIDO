@@ -8,3 +8,79 @@
 .OrdersBox{
     margin-bottom: 100px;
 }
+
+.ItemContainer {
+    margin: 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.ItemContainer img{
+    background-color: rgba(0, 0, 0, 0.1);
+    max-height: 100px;
+    max-width: 60px;
+    padding: 3px;
+}
+
+.ItemContainer a{
+    text-decoration: none;
+    color: #000000;
+    font-size: 15px;
+    font-weight: bold;
+    font-family: 'Oxygen', sans-serif;
+}
+
+.ItemImageAndName{
+    display: flex;
+    flex-direction: row;
+}
+
+.ItemImageAndName div{
+    margin-left: 10px;
+}
+
+.ItemImageAndName p {
+    font-size: 12px;
+    font-family: 'Oxygen', sans-serif;
+}
+
+.ItemImageAndName button{
+    display: flex;
+    align-items: center;
+    background-color: rgb(72, 190, 68);
+    color: #ffffff;
+    font-size: 12px;
+    font-family: 'Oxygen', sans-serif;
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.ItemImageAndName button:hover{
+    background-color: rgb(53, 153, 50);
+    cursor: pointer;
+}
+
+.ItemButtons{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 10px;
+}
+
+.ItemButtons button{
+    font-weight: 700;
+    font-size: 14px;
+    font-family: 'Oxygen', sans-serif;
+    background-color: #ffffff;
+    border: 1px solid #000000;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.ItemButtons button:hover{
+    background-color: #000000;
+    color: #ffffff;
+    cursor: pointer;
+}
