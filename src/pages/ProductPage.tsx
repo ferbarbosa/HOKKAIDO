@@ -13,8 +13,10 @@ import '../styles/productPage.css';
 //icons
 import StraightenIcon from '@mui/icons-material/Straighten';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import { FoundationOutlined } from '@mui/icons-material';
 
 interface Item {
+  itemId: string;
   name: string;
   cover: Array<any>;
   price: string;
@@ -23,6 +25,7 @@ interface Item {
   description: string;
   selectedColor: string;
   selectedSize: string;
+  quantity: number;
 };
 
 interface Props {
@@ -32,7 +35,7 @@ interface Props {
 
 export const ProductPage = () => {
 
-  const [item, setItem] = useState<Item>({ name: 'Title', cover: ['img'], price: '99.99', size: [''], color: [''], description: '', selectedColor: '', selectedSize: '' });
+  const [item, setItem] = useState<Item>({ itemId: '',name: 'Title', cover: ['img'], price: '99.99', size: [''], color: [''], description: '', selectedColor: '', selectedSize: '', quantity: 1 });
   const [selectedColor, setselectedColor] = useState<string>('');
   const [selectedSize, setSelectedSize] = useState<string>('');
   const [selectedPreview, setSelectedPreview] = useState<string>('img')
@@ -55,6 +58,7 @@ export const ProductPage = () => {
       .then(function (response: any) {
         // handle success
         setItem({
+          itemId: response.data.itemId,
           name: response.data.title,
           cover: response.data.img,
           price: response.data.price,
@@ -62,7 +66,8 @@ export const ProductPage = () => {
           color: response.data.color,
           description: response.data.description,
           selectedColor: '',
-          selectedSize: ''
+          selectedSize: '',
+          quantity: 1,
         });
 
         setSelectedPreview(response.data.img[0]);
@@ -99,8 +104,27 @@ export const ProductPage = () => {
       });
       return;
     }
+
+
+
     if (items) {
       const arrayItems = JSON.parse(items);
+      let foundOne = false;
+
+      arrayItems.map((found:any) => {
+        if (found.itemId === item.itemId && found.selectedColor === item.selectedColor && found.selectedSize === item.selectedSize) {
+          found.quantity += 1;
+          foundOne = true;
+        }
+      })
+
+      if(foundOne){
+        let newArray = JSON.stringify(arrayItems);
+        localStorage.setItem("CART_LIST", newArray);
+        window.dispatchEvent(new Event("storage"));
+        return;
+      }
+
       const putInOne = [...arrayItems, item];
       const newItems = JSON.stringify(putInOne);
       localStorage.setItem("CART_LIST", newItems);
@@ -116,6 +140,7 @@ export const ProductPage = () => {
     setselectedColor(color);
     setShowError(false);
     setItem({
+      itemId: item.itemId,
       name: item.name,
       cover: item.cover,
       price: item.price,
@@ -123,7 +148,8 @@ export const ProductPage = () => {
       color: item.color,
       description: item.description,
       selectedColor: color,
-      selectedSize: item.selectedSize
+      selectedSize: item.selectedSize,
+      quantity: item.quantity,
     });
   }
 
@@ -138,6 +164,7 @@ export const ProductPage = () => {
     setSelectedSize(newSize);
     setShowError(false);
     setItem({
+      itemId: item.itemId,
       name: item.name,
       cover: item.cover,
       price: item.price,
@@ -145,7 +172,8 @@ export const ProductPage = () => {
       color: item.color,
       description: item.description,
       selectedColor: item.selectedColor,
-      selectedSize: newSize
+      selectedSize: newSize,
+      quantity: item.quantity,
     });
   };
 

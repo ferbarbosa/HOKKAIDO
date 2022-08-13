@@ -148,7 +148,7 @@ export default function HeaderNav() {
     useEffect(() => {
         var total = 0;
         cartItems.map((item, index) => {
-            total += Number(item.price);
+            total += Number(item.price * item.quantity);
         })
         settotalCartValue(total.toFixed(2));
 
@@ -173,6 +173,41 @@ export default function HeaderNav() {
         } else {
             handleOpenLogin();
         }
+    }
+
+    const handleBuy = (event: any) => {
+        event?.preventDefault();
+        const localUser = localStorage.getItem('CURRENT_USER');
+        if(localUser){
+            const user = JSON.parse(localUser);
+        }
+
+        let userId = user ? user.userId : 0;
+        let itemsIds:Array<string> = [];
+        let status = 'Waiting Confirmation';
+
+        cartItems.map((item, index) => {
+            itemsIds.push(item.itemId);
+        })
+
+        const data = JSON.stringify({
+            userId: userId,
+            items: itemsIds,
+            status: status
+        })
+
+        const config = {
+            headers: {'Content-Type': 'application/json'}
+        }
+
+        api.post('/order', data, config).then(function (response: any) {
+            alert("Compra realizada com sucesso!");
+            localStorage.removeItem("CART_LIST");
+            window.dispatchEvent(new Event("storage"));
+            window.location.href = '/account/orders';
+        }).catch(function (error: any) {
+            console.log(error);
+        });
     }
 
     const handleRegister = (event: any) => {
@@ -442,7 +477,7 @@ export default function HeaderNav() {
                                 name={item.name}
                                 cover={item.cover[0]}
                                 price={item.price}
-                                quantity={1}
+                                quantity={item.quantity}
                                 selectedColor={item.selectedColor}
                                 selectedSize={item.selectedSize}
                             />
@@ -477,7 +512,7 @@ export default function HeaderNav() {
                     With hokkaido card 5% off
                 </p>
 
-                <button className="buyButton">
+                <button className="buyButton" onClick={handleBuy}>
                     <p className="buyButtonTxt">BUY</p>
                 </button>
             </Popover>

@@ -107,7 +107,10 @@ export const Catalog: React.FC = () => {
                     <div className="FilterCatalog">
                         <div>
                             <div className="dropdown">
-                                <button className="dropbtn"><a className='DropdownText'>Size</a> <KeyboardArrowDownIcon /></button>
+                                <button className="dropbtn">
+                                    <a className='DropdownText'>
+                                        {filterSize ? filterSize.split(',') : 'Size'}
+                                    </a> <KeyboardArrowDownIcon /></button>
                                 <div className="dropdown-content">
                                     <button onClick={() => setFilterSize('P')}>P</button>
                                     <button onClick={() => setFilterSize('M')}>M</button>
@@ -119,7 +122,10 @@ export const Catalog: React.FC = () => {
                             </div>
 
                             <div className="dropdown">
-                                <button className="dropbtn"><a className='DropdownText'>Type</a> <KeyboardArrowDownIcon /></button>
+                                <button className="dropbtn">
+                                    <a className='DropdownText'>
+                                     {filterType ? filterType.split(',') : 'Type'}
+                                    </a> <KeyboardArrowDownIcon /></button>
                                 <div className="dropdown-content">
                                     <button onClick={() => setFilterType(',tank')}>Tank top</button>
                                     <button onClick={() => setFilterType(',shirt')}>Shirt</button>
@@ -131,7 +137,11 @@ export const Catalog: React.FC = () => {
                             </div>
 
                             <div className="dropdown">
-                                <button className="dropbtn"><a className='DropdownText'>Color</a> <KeyboardArrowDownIcon /></button>
+                                <button className="dropbtn">
+                                    <a className='DropdownText'>
+                                        {filterColor ? filterColor.split(',') : 'Color'}
+                                    </a> <KeyboardArrowDownIcon />
+                                </button>
                                 <div className="dropdown-content">
                                     <button onClick={() => setFilterColor(',white')}>white</button>
                                     <button onClick={() => setFilterColor(',black')} >Black</button>

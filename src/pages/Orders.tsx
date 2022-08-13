@@ -5,6 +5,8 @@ import Container from '@mui/material/Container';
 import OrderCard from '../components/OrderCard';
 import Grid from '@mui/material/Grid';
 
+import '../styles/orders.css';
+
 interface Items {
     id: string;
     itemsContent: Array<any>;
@@ -13,7 +15,9 @@ interface Items {
 export const Orders: React.FC = () => {
 
     const [orders, setOrders] = useState<Array<any>>([]);
-    const [items, setItems] = useState<Array<Items>>([{ id: 'teste', itemsContent: [] }]);
+    const [items, setItems] = useState<Array<any>>([]);
+    const [loadedItems, setLoadedItems] = useState<boolean>(false);
+    const [completedLoad, setCompletedLoad] = useState<boolean>(false);
 
     const [fetched, setFetched] = useState<boolean>(false);
 
@@ -23,48 +27,53 @@ export const Orders: React.FC = () => {
 
     useEffect(() => {
 
-        if (!fetched) {
-            setFetched(true);
-            const localUser = localStorage.getItem('CURRENT_USER');
-            if (localUser) {
-                const user = JSON.parse(localUser);
-                api.get('/orders/' + user.userId)
-                    .then(function (response: any) {
-                        setOrders(response.data);
 
 
-                    })
-                    .catch(function (error: any) {
-                        console.log(error);
-                    })
+        const getOrder = async () => {
+            if (!fetched) {
+                setFetched(true);
+                const localUser = localStorage.getItem('CURRENT_USER');
+                if (localUser) {
+                    const user = JSON.parse(localUser);
+                    await api.get('/orders/' + user.userId)
+                        .then(function (response: any) {
+                            setOrders(response.data);
+                        })
+                        .catch(function (error: any) {
+                            console.log(error);
+                        })
+                }
+
             }
 
+            return () => {
+                setFetched(false);
+            }
         }
 
-        return () => {
-            setFetched(false);
-        }
+        getOrder();
 
 
     }, [orders]);
 
-    const handleItems = (itemId: any) => {
+    useEffect(() => {
 
-        let itemValue:any = []
+        if(!loadedItems){
+            setLoadedItems(true);
+                api.get('/items/?limit=0')
+                    .then(function (response: any) {
+                        setItems(response.data);
+                        console.log(response.data);
+                    }).catch(function (error: any) {
+                        console.log(error);
+                    });
+        }
 
-        api.get('/items/' + itemId)
-            .then(function (response: any) {
-                itemValue.push(response.data);
+        return () => {
+            setLoadedItems(false);
+        }
 
-            })
-            .catch(function (error: any) {
-                console.log(error);
-            })
-
-        return itemValue;
-    }
-
-
+    }, [items]);
 
 
 
@@ -78,16 +87,31 @@ export const Orders: React.FC = () => {
                     /
                     <Link className='PagesCatalogLink' to={"/account/orders"}>Orders</Link>
                 </p>
-                <p>Seus pedidos</p>
-                <Grid container spacing={1}>
-                    {orders.map((order: any, index: any) => (
-                        <Grid item xs={12} sm={12} md={12} key={index}>
-                            <OrderCard cod={order.orderId} date={formatDate(order.createdAt)} status={order.status} />
-                            <div>
-                            </div>
-                        </Grid>
-                    )
-                    )}
+                <p className='YourOrdersTxt'>Seus pedidos</p>
+                <Grid container spacing={1} className='OrdersBox'>
+                    {
+                        orders.map((order: any, index: any) => (
+                            <Grid item xs={12} sm={12} md={12} key={index}>
+                                <OrderCard cod={order.orderId} date={formatDate(order.createdAt)} status={order.status}>
+                                {
+                                    order.items.map((itemId: any, indexA: any) => (
+                                        items.map((item: any, index: any) => {
+                                            if(item.itemId === itemId){
+                                                
+                                                return (
+                                                    <div>
+                                                        <img src={item.img[0]} alt={item.title} key={index} />
+                                                        <p key={index}>{item.title}</p>
+                                                    </div>
+                                                )
+                                            }
+                                        })
+                                    ))
+                                }
+                                </OrderCard>
+                            </Grid>
+                        ))
+                    }
 
                 </Grid>
             </Container>

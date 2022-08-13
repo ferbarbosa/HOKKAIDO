@@ -10,9 +10,10 @@ interface Props {
   cod: string;
   status: string;
   date: string;
+  children: any;
 };
 
-const OrderCard: React.FC<Props> = ({ cod, status, date }) => {
+const OrderCard: React.FC<Props> = ({ cod, status, date, children }) => {
   return (
     <Card sx={{ width: '100%', border: '1px solid #e0e0e0', }}>
       <div
@@ -57,7 +58,7 @@ const OrderCard: React.FC<Props> = ({ cod, status, date }) => {
             Status: 
             <span
               style={{
-                color: {'Waiting Confirmation': 'yellow', 'In transit': 'yellow', 'Delivered': 'green', 'Canceled' : 'red'}[status],
+                color: {'Waiting Confirmation': 'orange', 'In transit': 'orange', 'Delivered': 'green', 'Canceled' : 'red'}[status],
               }}
             >
                 {status}
@@ -88,9 +89,8 @@ const OrderCard: React.FC<Props> = ({ cod, status, date }) => {
 
         </div>
       </div>
-      <p>Cod: {cod}</p>
-      <p>Status: {status}</p>
 
+      {children}
       <p>See details</p>
     </Card>
   )

@@ -104,7 +104,21 @@ export const CartItem: React.FC<Props>  = ({id,name, cover, price, quantity, sel
                                }}
                             >
                                 {selectedSize}
-                        </p> 
+                        </p>
+                        <div
+                            style={{
+                                marginLeft: '5px',
+                            }}
+                        >
+                            <p
+                                style={{
+                                    fontFamily: 'Oxygen',
+                                    fontSize: '12px',
+                                    fontWeight: '700',
+                                    margin: '0',
+                                }}
+                            >Qtd:{quantity}</p>
+                        </div>
                     </Grid>  
                     <p
                         style={{
